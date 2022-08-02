@@ -1,0 +1,26 @@
+server:
+  servlet:
+    session:
+      timeout: 168h
+      cookie:
+        name: lila-session
+        http-only: true
+        secure: true
+  ssl:
+    enabled: false
+    key-store:
+    store-type:
+    key-store-password:
+  port: 15342
+
+spring:
+  thymeleaf:
+    cache: false
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+lila:
+  config:

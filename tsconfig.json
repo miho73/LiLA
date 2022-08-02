@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./.tsbuildinfo",
+
+    "target": "ES2017",
+
+    "module": "commonjs",
+    "rootDir": "src/main/resources/static/scripts/ts",
+
+    "outDir": "src/main/resources/static/scripts/js",
+    "newLine": "lf",
+
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": true,
+
+    "strict": true,
+    "alwaysStrict": true,
+
+    "skipLibCheck": true
+  },
+  "include": ["src/main/resources/static/scripts/ts/**/*"],
+  "exclude": ["node_modules", "build"]
+}

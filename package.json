@@ -1,0 +1,21 @@
+{
+  "name": "lila",
+  "version": "1.0.0",
+  "description": "LiLA",
+  "scripts": {
+    "build": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miho73/lila.git"
+  },
+  "author": "miho73",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/miho73/lila/issues"
+  },
+  "homepage": "https://github.com/miho73/lila#readme",
+  "dependencies": {
+    "typescript": "^4.7.4"
+  }
+}
