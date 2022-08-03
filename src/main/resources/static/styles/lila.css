@@ -2,6 +2,7 @@
 @import url(https://fonts.googleapis.com/css?family=Noto%20Sans%20KR);
 @import url(https://fonts.googleapis.com/css?family=Noto%20Sans%20JP);
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
 
 * {
     font-family: 'Noto Sans', 'Noto Sans KR', 'Noto Sans JP', 'Helvetica';
@@ -40,10 +41,18 @@ p {
 }
 
 *.transition {
-    -webkit-transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out;
-    -moz-transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out;
-    -o-transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out;
-    transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out;
+    -webkit-transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out, background-color .1s linear;
+    -moz-transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out, background-color .1s linear;
+    -o-transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out, background-color .1s linear;
+    transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out, background-color .1s linear;
+}
+
+
+div.grid-layout {
+    display: grid;
+    grid-template-rows: 7vh auto 160px;
+    min-height: 100vh;
+    width: 100vw;
 }
 
 
@@ -122,6 +131,7 @@ div.hambuger-footer {
     padding: 20px;
 }
 
+
 section.index-section {
     width: 100%;
     height: 100vh;
@@ -197,13 +207,65 @@ body.scroll-snap > * {
     scroll-snap-align: center;
 }
 
+
 footer {
     background-color: #f5f5f5;
-    padding: 40px 20px;
+    padding: 30px 20px;
 }
 p.footer,a.footer {
     margin: 5px 0;
     color: #888;
+}
+
+/* DESIGN */
+a.button {
+    padding: 8px 16px;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    color: #666;
+    text-decoration: none;
+}
+a.button:hover {
+    background-color: #eaeaea;
+}
+a.button:active {
+    background-color: #e6e6e6;
+    color: #888;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+}
+fieldset {
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 5px;
+}
+fieldset.hidden-field {
+    display: none;
+}
+
+input[type='text'],input[type='password'] {
+    padding: 5px 10px;
+    border: #ddd solid 1px;
+    border-radius: 5px;
+}
+
+
+*.caption {
+    font-size: 0.9em;
+    color: #999;
+}
+a.caption {
+    text-decoration: underline;
+    font-size: 1em;
 }
 
 /* ON MOBILE */

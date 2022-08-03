@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <th:block th:fragment="header-hambuger">
+        <div class="hambuger-menu transition on-mobile" id="hambuger-menu">
+            <div class="hambuger-casing">
+                <div class="space-between hambuger-header">
+                    <div class="ham-profile">
+                        <a href="/auth" class="hide nav-link transition">로그인/가입</a>
+                        <a href="/signout" class="hide nav-link transition">로그아웃</a>
+                    </div>
+                    <button class="nav-hambuger on-mobile" title="메뉴" onclick="closeHambuger()">
+                        <img src="/static/images/x.svg">
+                    </button>
+                </div>
+                <div class="vertical-align">
+                    <a class="hide nav-link transition block fill" href="/problems">문제</a>
+                    <a class="hide nav-link transition block fill" href="/issues">이슈</a>
+                    <a class="hide nav-link transition block fill" href="/users">랭킹</a>
+                    <a class="hide nav-link transition block fill" href="/manage">관리</a>
+                    <a class="hide nav-link transition block fill" href="/settings">설정</a>
+                    <a class="hide nav-link transition block fill" href="/profile">[username]</a>
+                </div>
+                <div class="hambuger-footer">
+                    <p>LiLA</p>
+                </div>
+            </div>
+        </div>
+    </th:block>
+
+    <th:block th:fragment="header-nav">
+        <header>
+            <nav class="space-between">
+                <h1>
+                    <a href="/" class="hide home-link">LiLA</a>
+                </h1>
+                <button class="nav-hambuger on-mobile" title="메뉴" onclick="openHambuger()">
+                    <img src="/static/images/hambuger.svg">
+                </button>
+                <div class="on-pc nav-links">
+                    <a href="/problems" class="hide nav-link transition">문제</a>
+                    <a href="/issues" class="hide nav-link transition">이슈</a>
+                    <a href="/users" class="hide nav-link transition">랭킹</a>
+                    <a href="/manage" class="hide nav-link transition">관리</a>
+                    <a href="/settings" class="hide nav-link transition">설정</a>
+                    <a href="/profile" class="hide nav-link transition">[username]</a>
+                    <a href="/auth" class="hide nav-link transition">로그인/가입</a>
+                    <a href="/signout" class="hide nav-link transition">로그아웃</a>
+                </div>
+            </nav>
+        </header>
+    </th:block>
+
+    <th:block th:fragment="footer">
+        <footer>
+            <p class="footer">
+                <a href="https://github.com/miho73/LiLA" target="_blank" class="footer hide">LiLA</a>
+            </p>
+            <div class="horizontal-align" style="justify-content: flex-start;">
+                <a class="footer hide" target="_blank" href="/lila">리라팀</a>
+                <a class="footer hide" target="_blank" href="/docs/eula">이용약관</a>
+                <a class="footer hide" target="_blank" href="/docs/privacy">개인정보처리방침</a>
+                <a class="footer hide" target="_blank" href="/manage/apply">관리자</a>
+            </div>
+            <p class="footer">COPYRIGHT © 2022 예지 ALL RIGHTS RESERVED</p>
+        </footer>
+    </th:block>
+</html>

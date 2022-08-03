@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,7 +36,7 @@ public class MainController {
     }
 
     @GetMapping("")
-    public String index() {
+    public String index(HttpServletResponse response) {
         return "index";
     }
 
