@@ -10,9 +10,9 @@ jobs:
   Build_and_distribute:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 16
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -24,8 +24,8 @@ jobs:
       - name: Prepare to sync
         run: |
           mkdir to_be_sync
-          cp -r ./{build/libs/IPU-3.0.0.jar} ./to_be_sync
-          mv to_be_sync/IPU-3.0.0.jar to_be_sync/IPU.jar
+          cp -r ./{build/libs/LiLA-1.0.0.jar} ./to_be_sync
+          mv to_be_sync/LiLA-1.0.0.jar to_be_sync/LiLA.jar
       - name: Upload to FTP
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
@@ -34,7 +34,7 @@ jobs:
           password: ${{ secrets.FTP_USER_PASSWORD }}
           protocol: ftps
           local-dir: ./to_be_sync/
-          server-dir: ./ipu/
+          server-dir: ./lila/
       - name: action-slack
         uses: 8398a7/action-slack@v3.12.0
         with:
