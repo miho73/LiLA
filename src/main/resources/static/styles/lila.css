@@ -1,0 +1,221 @@
+@import url(https://fonts.googleapis.com/css?family=Noto%20Sans);
+@import url(https://fonts.googleapis.com/css?family=Noto%20Sans%20KR);
+@import url(https://fonts.googleapis.com/css?family=Noto%20Sans%20JP);
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+* {
+    font-family: 'Noto Sans', 'Noto Sans KR', 'Noto Sans JP', 'Helvetica';
+    -webkit-appearance: none;
+}
+*.montserrat {
+    font-family: 'Montserrat', 'Noto Sans', 'Noto Sans KR', 'Noto Sans JP', 'Helvetica';
+}
+
+html.scroll-snap {
+    height: 100vh;
+    overflow: hidden;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+a.hide:hover {
+    text-decoration: none;
+}
+
+p {
+    margin: 0;
+}
+
+*.on-mobile {
+    display: none;
+}
+
+*.transition {
+    -webkit-transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out;
+    -moz-transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out;
+    -o-transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out;
+    transition: color .1s linear, transform .1s linear, box-shadow .1s linear, top .2s ease-out;
+}
+
+
+nav {
+    padding: 0 0 0 10%;
+    height: 7vh;
+}
+button.nav-hambuger {
+    background-color: transparent;
+    width: 45px;
+    height: 45px;
+    outline: none;
+    border: none;
+}
+div.nav-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 40px;
+    gap: 20px;
+}
+a.nav-link {
+    font-size: 1.1em;
+    color: #666;
+    font-weight: 500;
+}
+a.nav-link:hover {
+    color: #222;
+}
+a.home-link {
+    color: inherit;
+}
+a.block {
+    display: block;
+}
+a.fill {
+    width: 100%;
+}
+div.hambuger-menu {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    top: -100vh;
+    background-color: #f5f5f5;
+}
+div.hambuger-open {
+    top: 0;
+}
+div.hambuger-casing {
+    padding: 20px;
+}
+div.hambuger-open > div > * {
+    animation: .1s linear .2s forwards ham-ele;
+    opacity: 0;
+}
+@keyframes ham-ele {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+div.hambuger-header {
+    margin: -20px -20px 0 0;
+    height: 7vh;
+}
+div.hambuger-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 20px;
+}
+
+section.index-section {
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+}
+section.first-section {
+    height: 93vh;
+}
+*.all-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+div.section-div {
+    margin: 20px 0;
+}
+*.horizontal-align {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 20px;
+}
+*.vertical-align {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+}
+*.space-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+a.card {
+    display: block;
+    text-decoration: none;
+    box-shadow: 0 0 4px 2px #ddd;
+    border-radius: 15px;
+    max-width: 200px;
+}
+a.card:hover {
+    box-shadow: 0 0 6px 3px #ccc;
+    transform: scale(1.005);
+}
+p.card-header {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin: 0px 20px 0px 20px;
+    color: #222;
+}
+p.card-caption {
+    font-size: 1em;
+    margin: 0px 20px 10px 20px;
+    color: #666;
+}
+img.card-image {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 15px 15px 0 0;
+}
+
+body.scroll-snap {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    overflow-x: auto;
+    height: 100vh;
+}
+body.scroll-snap > * {
+    scroll-snap-align: center;
+}
+
+footer {
+    background-color: #f5f5f5;
+    padding: 40px 20px;
+}
+p.footer,a.footer {
+    margin: 5px 0;
+    color: #888;
+}
+
+/* ON MOBILE */
+@media (max-width: 800px) {
+    *.on-pc {
+        display: none !important;
+    }
+    *.on-mobile {
+        display: block !important;
+    }
+
+    footer {
+        padding: 40px 10px;
+    }
+}
