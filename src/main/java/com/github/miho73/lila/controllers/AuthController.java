@@ -1,5 +1,6 @@
 package com.github.miho73.lila.controllers;
 
+import com.github.miho73.lila.objects.User;
 import com.github.miho73.lila.services.AuthService;
 import com.github.miho73.lila.services.JWTService;
 import com.github.miho73.lila.services.oidc.GoogleOIDCService;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @Controller("AuthController")
 @RequestMapping("/auth")
@@ -40,7 +42,7 @@ public class AuthController {
     @GetMapping("oidc/callback/google")
     public void googleOIDCCallback(HttpSession session, HttpServletResponse response, HttpServletRequest request,
                                    @RequestParam("code") String code,
-                                   @RequestParam("state") String state) throws IOException {
+                                   @RequestParam("state") String state) throws IOException, SQLException {
         // Check state
         if(session.getAttribute("google_auth_state") == null) {
             response.sendError(401);
@@ -50,7 +52,7 @@ public class AuthController {
         session.removeAttribute("google_auth_state");
 
         if(state.equals(stateSession)) {
-            authService.proceedAuth(0, code, response);
+            authService.proceedAuth(User.AUTH_SOURCES.GOOGLE, code, response);
             response.sendRedirect("/");
         }
         else {

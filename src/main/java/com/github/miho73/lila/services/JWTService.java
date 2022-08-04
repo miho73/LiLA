@@ -91,4 +91,13 @@ public class JWTService {
             return false;
         }
     }
+
+    /**
+     * Decode JWT token text. THIS FUNCTION WILL NOT VERIFY TOKEN
+     * @param jwtText Base64 encoded jwt token
+     * @return decoded jwt token
+     */
+    public DecodedJWT decodeJWT(String jwtText) {
+        return JWT.decode(jwtText);
+    }
 }

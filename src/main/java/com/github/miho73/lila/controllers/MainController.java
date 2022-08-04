@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
+import java.nio.Buffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -27,12 +28,23 @@ public class MainController {
         ClassPathResource sitemapResource = new ClassPathResource("etc/sitemap.xml");
 
         try {
-            this.robots = String.join("\n", Files.readAllLines(Paths.get(robotsResource.getURI())));
-            this.sitemap= String.join("\n", Files.readAllLines(Paths.get(sitemapResource.getURI())));
+            BufferedReader robotStream = new BufferedReader(new InputStreamReader(robotsResource.getInputStream(), StandardCharsets.UTF_8));
+            BufferedReader sitemapStream = new BufferedReader(new InputStreamReader(sitemapResource.getInputStream(), StandardCharsets.UTF_8));
+            this.robots = readBufferedReader(robotStream);
+            this.sitemap = readBufferedReader(sitemapStream);
         } catch (IOException | RuntimeException e) {
             logger.error("Cannot read file.", e);
             throw new RuntimeException(e);
         }
+    }
+    private String readBufferedReader(BufferedReader reader) throws IOException {
+        StringBuilder stringBuffer = new StringBuilder();
+        String temp;
+        while ((temp = reader.readLine()) != null) {
+            stringBuffer.append(temp)
+                        .append("\n");
+        }
+        return stringBuffer.toString();
     }
 
     @GetMapping("")

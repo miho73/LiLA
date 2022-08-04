@@ -25,4 +25,10 @@ LiLA uses postgresql as DBMS. Here's the structure and user spec for IPU.
 > join_date TIMESTAMP WITH TIME ZONE NOT NULL,
 > last_login TIMESTAMP WITH TIME ZONE
 > );
-)```
+> ```
+
+## 3. Grant required privileges
+> ```sql
+> GRANT ALL PRIVILEGES ON users TO <USERNAME>;
+> ALTER TABLE users OWNER TO lila_user;
+> ```

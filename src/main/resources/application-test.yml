@@ -6,6 +6,10 @@ server:
         name: lila-session
         http-only: true
         secure: true
+    jwt:
+      cookie:
+        http-only: true
+        secure: true
   ssl:
     enabled: false
     key-store:
@@ -37,7 +41,7 @@ lila:
       client-id: 353178292557-u0lifp4uncdo656tfeb1pl557l0t9rip.apps.googleusercontent.com
       client-secret: ENC(wiykEt2Hfx6I2ZtQBw1eW/pILpnUqqlFdmQVsB3EY2qtgQWFbVzci1qrglMn/ae37gGyoZSlDKUKBLmGr7QLHXs23Jt8PQAyn399+rajRvM=)
       redirect-uri: http://localhost:15342/auth/oidc/callback/google
-      auth-request-uri: https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&response_type=code&access_type=offline&prompt=consent&scope=openid email&redirect_uri=%s&state=%s
+      auth-request-uri: https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&response_type=code&access_type=offline&prompt=consent&scope=openid email profile&redirect_uri=%s&state=%s
       access-token-uri: https://oauth2.googleapis.com/token
       certs-uri: https://www.googleapis.com/oauth2/v3/certs
   database:
@@ -45,3 +49,4 @@ lila:
       url: jdbc:postgresql://localhost:5432/lila
       name: ENC(iDX5DTpkR+cA2HmnesAoZshvY1TRUCv3vb6k2ckcXOvwvx8Oyc1/FsRK58X6VAlH)
       password: ENC(qTed/xUH+bQq8sEAQLDIRw+QfLWSsm/mW7Gd0vqLLULPnax+2IEg47VGZT6wWXj7)
+
