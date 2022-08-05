@@ -31,5 +31,5 @@ LiLA uses postgresql as DBMS. Here's the structure and user spec for IPU.
 ## 3. Grant required privileges
 > ```sql
 > GRANT ALL PRIVILEGES ON users TO <USERNAME>;
-> ALTER TABLE users OWNER TO lila_user;
+> ALTER TABLE users OWNER TO <USERNAME>;
 > ```
