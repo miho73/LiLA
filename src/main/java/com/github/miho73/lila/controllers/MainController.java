@@ -1,6 +1,7 @@
 package com.github.miho73.lila.controllers;
 
 import com.github.miho73.lila.services.AuthService;
+import com.github.miho73.lila.services.SessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class MainController {
     private String sitemap, robots;
 
     @Autowired AuthService authService;
+    @Autowired SessionService sessionService;
 
     @PostConstruct
     public void initCommonControl() {
@@ -56,9 +58,8 @@ public class MainController {
 
     @GetMapping("")
     public String index(Model model,
-                        HttpServletResponse response, HttpSession session,
-                        @CookieValue(value = "lila-access", required = false, defaultValue = "") String jwtToken) {
-        authService.loadIdentityToModel(model, jwtToken, session);
+                        HttpServletResponse response, HttpSession session) {
+        sessionService.loadIdentity(model, session);
         return "index";
     }
 

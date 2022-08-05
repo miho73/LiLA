@@ -4,7 +4,20 @@ import java.sql.Timestamp;
 
 public class User {
     private int userCode;
-    private String userId, refreshToken, userName, email;
+    private String userId;
+    private String refreshToken;
+    private String userName;
+    private String email;
+
+    public String getPrivilege() {
+        return privilege;
+    }
+
+    public void setPrivilege(String privilege) {
+        this.privilege = privilege;
+    }
+
+    private String privilege;
     private AUTH_SOURCES authFrom;
     private Timestamp joinDate;
 

@@ -6,8 +6,8 @@
             <div class="hambuger-casing">
                 <div class="space-between hambuger-header">
                     <div class="ham-profile">
-                        <a href="/auth" class="hide nav-link transition">로그인/가입</a>
-                        <a href="/signout" class="hide nav-link transition">로그아웃</a>
+                        <a href="/auth" class="hide nav-link transition" th:unless="${login}">로그인/가입</a>
+                        <a href="/auth/signout" class="hide nav-link transition" th:if="${login}">로그아웃</a>
                     </div>
                     <button class="nav-hambuger on-mobile" title="메뉴" onclick="closeHambuger()">
                         <img src="/static/images/x.svg">
@@ -17,9 +17,8 @@
                     <a class="hide nav-link transition block fill" href="/problems">문제</a>
                     <a class="hide nav-link transition block fill" href="/issues">이슈</a>
                     <a class="hide nav-link transition block fill" href="/users">랭킹</a>
-                    <a class="hide nav-link transition block fill" href="/manage">관리</a>
-                    <a class="hide nav-link transition block fill" href="/settings">설정</a>
-                    <a class="hide nav-link transition block fill" href="/profile">[username]</a>
+                    <a class="hide nav-link transition block fill" href="/profile" th:if="${login}" th:text="${username}"></a>
+                    <a class="hide nav-link transition block fill" href="/settings" th:if="${login}">설정</a>
                 </div>
                 <div class="hambuger-footer">
                     <p>LiLA</p>
@@ -41,11 +40,10 @@
                     <a href="/problems" class="hide nav-link transition">문제</a>
                     <a href="/issues" class="hide nav-link transition">이슈</a>
                     <a href="/users" class="hide nav-link transition">랭킹</a>
-                    <a href="/manage" class="hide nav-link transition">관리</a>
-                    <a href="/settings" class="hide nav-link transition">설정</a>
-                    <a href="/profile" class="hide nav-link transition">[username]</a>
-                    <a href="/auth" class="hide nav-link transition">로그인/가입</a>
-                    <a href="/signout" class="hide nav-link transition">로그아웃</a>
+                    <a href="/profile" class="hide nav-link transition" th:if="${login}" th:text="${username}"></a>
+                    <a href="/settings" class="hide nav-link transition" th:if="${login}">설정</a>
+                    <a href="/auth" class="hide nav-link transition" th:unless="${login}">로그인/가입</a>
+                    <a href="/auth/signout" class="hide nav-link transition" th:if="${login}">로그아웃</a>
                 </div>
             </nav>
         </header>

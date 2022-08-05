@@ -2,12 +2,9 @@ server:
   servlet:
     session:
       timeout: 168h
+      storage-type: redis
       cookie:
         name: lila-session
-        http-only: true
-        secure: true
-    jwt:
-      cookie:
         http-only: true
         secure: true
   ssl:
@@ -34,6 +31,10 @@ spring:
       enabled: true
     livereload:
       enabled: true
+  redis:
+    host: localhost
+    port: 6379
+    password: ENC(IH298hYdpuNtbN8EHwTsfo0nzgM0PD6pfoeWds0bMSg8NnLA5gZnzfdm0Qj8vz9HZ/s+x7yaYEriuRdcravQZQ==)
 
 lila:
   oidc:

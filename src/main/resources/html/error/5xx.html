@@ -6,15 +6,10 @@
         <th:block th:replace="fragments/header.html :: header"></th:block>
     </head>
     <body>
-        <div class="grid-layout">
-            <th:block th:replace="fragments/base.html :: header-hambuger"></th:block>
-            <th:block th:replace="fragments/base.html :: header-nav"></th:block>
-            <section class="all-center">
-                <b style="font-size: 4em;" th:text="${status}"></b>
-                <p style="margin-bottom: 20px; font-weight: 600; font-size: 1.3em;" th:text="${error}"></p>
-                <a href="/" class="button transition">홈으로 이동하기</a>
-            </section>
-            <th:block th:replace="fragments/base.html :: footer"></th:block>
+        <div class="all-center fill-page">
+            <b style="font-size: 4em;" th:text="${status}"></b>
+            <p style="margin-bottom: 20px; font-weight: 600; font-size: 1.3em;" th:text="${error}"></p>
+            <a href="/" class="button transition">홈으로 이동하기</a>
         </div>
     </body>
 </html>

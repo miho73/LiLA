@@ -23,7 +23,8 @@ LiLA uses postgresql as DBMS. Here's the structure and user spec for IPU.
 > email VARCHAR(250) NOT NULL,
 > auth_from smallint NOT NULL,
 > join_date TIMESTAMP WITH TIME ZONE NOT NULL,
-> last_login TIMESTAMP WITH TIME ZONE
+> last_login TIMESTAMP WITH TIME ZONE,
+> privilege CHAR(5) NOT NULL
 > );
 > ```
 

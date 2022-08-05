@@ -3,6 +3,7 @@ package com.github.miho73.lila.controllers;
 import com.github.miho73.lila.objects.User;
 import com.github.miho73.lila.services.AuthService;
 import com.github.miho73.lila.services.JWTService;
+import com.github.miho73.lila.services.SessionService;
 import com.github.miho73.lila.services.oidc.GoogleOIDCService;
 import com.github.miho73.lila.services.oidc.KakaoOIDCService;
 import org.json.JSONObject;
@@ -28,11 +29,18 @@ public class AuthController {
     @Autowired GoogleOIDCService googleOIDCService;
     @Autowired KakaoOIDCService kakaoOIDCService;
     @Autowired JWTService jwtService;
+    @Autowired SessionService sessionService;
     @Autowired AuthService authService;
 
     @GetMapping("")
-    public String login(Model model) {
+    public String login(Model model, HttpSession session) {
+        sessionService.loadIdentity(model, session);
         return "auth/login";
+    }
+    @GetMapping("signout")
+    public String signOut(HttpSession session) {
+        sessionService.invalidSession(session);
+        return "redirect:/";
     }
 
     @GetMapping("oidc/google")
@@ -54,7 +62,7 @@ public class AuthController {
         session.removeAttribute("google_auth_state");
 
         if(state.equals(stateSession)) {
-            authService.proceedAuth(User.AUTH_SOURCES.GOOGLE, code, response);
+            authService.proceedAuth(User.AUTH_SOURCES.GOOGLE, code, response, session);
             response.sendRedirect("/");
         }
         else {
@@ -81,7 +89,7 @@ public class AuthController {
         session.removeAttribute("kakao_auth_state");
 
         if(state.equals(stateSession)) {
-            authService.proceedAuth(User.AUTH_SOURCES.KAKAO, code, response);
+            authService.proceedAuth(User.AUTH_SOURCES.KAKAO, code, response, session);
             response.sendRedirect("/");
         }
         else {
@@ -97,6 +105,16 @@ public class AuthController {
         }
         else {
             return "your token is invalid!\n\n";
+        }
+    }
+    @GetMapping("/authorize")
+    @ResponseBody
+    public String authorize(HttpSession session) {
+        if(sessionService.checkLogin(session)) {
+            return "your session is logged in!\n\n";
+        }
+        else {
+            return "your session is not logged in!\n\n";
         }
     }
 }
