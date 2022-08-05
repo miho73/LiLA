@@ -44,9 +44,18 @@ lila:
       auth-request-uri: https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&response_type=code&access_type=offline&prompt=consent&scope=openid email profile&redirect_uri=%s&state=%s
       access-token-uri: https://oauth2.googleapis.com/token
       certs-uri: https://www.googleapis.com/oauth2/v3/certs
+    kakao:
+      client-id: 5044ae1468b1f3bbddb94fa1819d409d
+      client-secret: ENC(tQ15VHUT1Op8NMhE50smuE1AKeJsx7nOJGU7hRipV0sAIyCW9HSO2xvIK1n0on9KYhmENvzHC0Omj3sO3WXmAVaLT29KnNsNX90TB0vuhRE=)
+      redirect:uri: http://localhost:15342/auth/oidc/callback/kakao
+      auth-request-uri: https://kauth.kakao.com/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code&state=%s&prompt=login
+      access-token-uri: https://kauth.kakao.com/oauth/token
+      user-data-uri: https://kapi.kakao.com/v2/user/me
   database:
     connection:
       url: jdbc:postgresql://localhost:5432/lila
       name: ENC(iDX5DTpkR+cA2HmnesAoZshvY1TRUCv3vb6k2ckcXOvwvx8Oyc1/FsRK58X6VAlH)
       password: ENC(qTed/xUH+bQq8sEAQLDIRw+QfLWSsm/mW7Gd0vqLLULPnax+2IEg47VGZT6wWXj7)
 
+# JASYPT ENCRYPTION COMMAND:
+# ./encrypt.sh algorithm=PBEWITHHMACSHA512ANDAES_256 keyObtentionIterations=1000 ivGeneratorClassName=org.jasypt.iv.RandomIvGenerator password=<PASSWORD> input=<INPUT>

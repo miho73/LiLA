@@ -4,12 +4,14 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.github.miho73.lila.utils.HttpConnection;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -22,6 +24,7 @@ import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
+import java.util.Map;
 
 @Service("JWTService")
 public class JWTService {
@@ -32,22 +35,19 @@ public class JWTService {
 
     @Value("${lila.oidc.google.certs-uri}") String googleCertsUri;
 
+    @Autowired HttpConnection httpConnection;
+
     private JSONArray googleCertKeys;
 
     @PostConstruct
     public void initVerifier() {
-        HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        httpRequestFactory.setConnectTimeout(2000);
-        httpRequestFactory.setReadTimeout(3000);
-        HttpClient httpClient = HttpClientBuilder.create()
-                .setMaxConnTotal(200)
-                .setMaxConnPerRoute(20)
-                .build();
-        httpRequestFactory.setHttpClient(httpClient);
-        RestTemplate restTemplate = new RestTemplate(httpRequestFactory);
-
-        ResponseEntity<String> response = restTemplate.getForEntity(googleCertsUri, String.class);
-        googleCertKeys = new JSONObject(response.getBody()).getJSONArray("keys");
+        try {
+            String response = httpConnection.httpGetRequest(googleCertsUri, Map.of());
+            googleCertKeys = new JSONObject(response).getJSONArray("keys");
+        }
+        catch (Exception e) {
+            logger.error("Cannot initiate Google JWT validator.", e);
+        }
     }
 
     /**

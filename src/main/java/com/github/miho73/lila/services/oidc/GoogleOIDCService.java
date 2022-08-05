@@ -1,18 +1,13 @@
 package com.github.miho73.lila.services.oidc;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import com.github.miho73.lila.utils.HttpConnection;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
 import java.util.Map;
 
 @Service("GoogleAuthService")
@@ -26,20 +21,7 @@ public class GoogleOIDCService extends OIDCService {
     @Value("${lila.oidc.google.auth-request-uri}") private String authRequestUri;
     @Value("${lila.oidc.google.access-token-uri}") private String accessTokenUri;
 
-    private static RestTemplate restTemplate;
-
-    @PostConstruct
-    public void initConnection() {
-        HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        httpRequestFactory.setConnectTimeout(2000);
-        httpRequestFactory.setReadTimeout(3000);
-        HttpClient httpClient = HttpClientBuilder.create()
-                .setMaxConnTotal(200)
-                .setMaxConnPerRoute(20)
-                .build();
-        httpRequestFactory.setHttpClient(httpClient);
-        restTemplate = new RestTemplate(httpRequestFactory);
-    }
+    @Autowired HttpConnection httpConnection;
 
     @Override
     public String getAuthUri(String state) {
@@ -47,21 +29,17 @@ public class GoogleOIDCService extends OIDCService {
     }
 
     @Override
-    public JSONObject getToken(String code) {
-        HttpHeaders headers = new HttpHeaders();
-        Map<String, String > requestParams = Map.of(
-                "client_id", clientId,
-                "client_secret", clientSecret,
-                "code", code,
-                "grant_type", "authorization_code",
-                "redirect_uri", redirectUri
-        );
-        HttpEntity<Map<String, String >> requestEntity = new HttpEntity<>(requestParams, headers);
-
+    public JSONObject getToken(String code) throws Exception {
         try {
-            ResponseEntity<String> response = restTemplate.postForEntity(accessTokenUri, requestEntity, String.class);
-            return new JSONObject(response.getBody());
-        } catch (RestClientException e) {
+            String response = httpConnection.httpPostRequest(accessTokenUri, Map.of(
+                    "client_id", clientId,
+                    "client_secret", clientSecret,
+                    "code", code,
+                    "grant_type", "authorization_code",
+                    "redirect_uri", redirectUri
+            ));
+            return new JSONObject(response);
+        } catch (Exception e) {
             logger.error("Failed to get access token from Google", e);
             throw e;
         }

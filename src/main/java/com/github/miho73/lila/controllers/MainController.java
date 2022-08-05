@@ -1,14 +1,19 @@
 package com.github.miho73.lila.controllers;
 
+import com.github.miho73.lila.services.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
@@ -21,6 +26,8 @@ public class MainController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private String sitemap, robots;
+
+    @Autowired AuthService authService;
 
     @PostConstruct
     public void initCommonControl() {
@@ -48,7 +55,10 @@ public class MainController {
     }
 
     @GetMapping("")
-    public String index(HttpServletResponse response) {
+    public String index(Model model,
+                        HttpServletResponse response, HttpSession session,
+                        @CookieValue(value = "lila-access", required = false, defaultValue = "") String jwtToken) {
+        authService.loadIdentityToModel(model, jwtToken, session);
         return "index";
     }
 

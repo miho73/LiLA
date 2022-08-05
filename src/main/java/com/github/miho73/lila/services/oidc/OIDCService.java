@@ -7,7 +7,7 @@ import java.security.SecureRandom;
 
 public abstract class OIDCService {
 
-    public abstract JSONObject getToken(String code);
+    public abstract JSONObject getToken(String code) throws Exception;
 
     public String createStateCode() {
         return new BigInteger(130, new SecureRandom()).toString(32);

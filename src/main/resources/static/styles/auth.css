@@ -23,3 +23,6 @@ a.oidc {
 a.google {
     background-image: url('/static/images/google_signin_buttons/btn_google_light_normal_ios.svg');
 }
+a.kakao {
+    background-image: url('/static/images/kakao_signin_buttons/ko/kakao_login_large_narrow.png');
+}
