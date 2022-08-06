@@ -5,15 +5,16 @@
         <div class="hambuger-menu transition on-mobile" id="hambuger-menu">
             <div class="hambuger-casing">
                 <div class="space-between hambuger-header">
-                    <div class="ham-profile">
-                        <a href="/auth" class="hide nav-link transition" th:unless="${login}">로그인/가입</a>
-                        <a href="/auth/signout" class="hide nav-link transition" th:if="${login}">로그아웃</a>
-                    </div>
+                    <p></p>
                     <button class="nav-hambuger on-mobile" title="메뉴" onclick="closeHambuger()">
                         <img src="/static/images/x.svg">
                     </button>
                 </div>
                 <div class="vertical-align">
+                    <div class="ham-profile">
+                        <a href="/auth" class="hide nav-link transition" th:unless="${login}">로그인/가입</a>
+                        <a href="/auth/signout" class="hide nav-link transition" th:if="${login}">로그아웃</a>
+                    </div>
                     <a class="hide nav-link transition block fill" href="/problems">문제</a>
                     <a class="hide nav-link transition block fill" href="/issues">이슈</a>
                     <a class="hide nav-link transition block fill" href="/users">랭킹</a>

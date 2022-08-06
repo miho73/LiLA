@@ -23,6 +23,7 @@ public class ProblemController {
     @GetMapping("")
     public String problem(Model model, HttpSession session) {
         sessionService.loadIdentity(model, session);
+        model.addAttribute("page", 0);
         return "problem/problemList";
     }
 }
