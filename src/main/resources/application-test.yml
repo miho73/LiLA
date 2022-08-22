@@ -13,9 +13,6 @@ server:
     store-type:
     key-store-password:
   port: 15342
-  error:
-    whitelabel:
-      enabled: false
 
 spring:
   web:

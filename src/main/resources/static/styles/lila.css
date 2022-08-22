@@ -8,6 +8,10 @@
     --bright-lilac: #dfd5ee;
     --lilac: #d0beee;
     --dark-lilac: #a08ebf;
+    --box-shadow: #eee;
+    --hover-box-shadow: #dfdfdf;
+    --text-gray: #222;
+    --caption-gray: #666;
 }
 
 * {
@@ -91,11 +95,8 @@ div.nav-links {
 }
 a.nav-link {
     font-size: 1.1em;
-    color: #666;
+    color: var(--text-gray);
     font-weight: 500;
-}
-a.nav-link:hover {
-    color: #222;
 }
 a.home-link {
     color: inherit;
@@ -186,24 +187,24 @@ div.section-div {
 a.card {
     display: block;
     text-decoration: none;
-    box-shadow: 0 0 4px 2px #ddd;
+    box-shadow: 0 0 4px 2px var(--box-shadow);
     border-radius: 15px;
     max-width: 200px;
 }
 a.card:hover {
-    box-shadow: 0 0 6px 3px #ccc;
+    box-shadow: 0 0 6px 3px var(--hover-box-shadow);
     transform: scale(1.005);
 }
 p.card-header {
     font-size: 1.3em;
     font-weight: 600;
     margin: 0px 20px 0px 20px;
-    color: #222;
+    color: var(--text-gray);
 }
 p.card-caption {
     font-size: 1em;
     margin: 0px 20px 10px 20px;
-    color: #666;
+    color: var(--caption-gray);
 }
 img.card-image {
     width: 100%;
@@ -236,7 +237,7 @@ p.footer,a.footer {
     padding: 8px 16px;
     border-radius: 10px;
     background-color: #f0f0f0;
-    color: #666;
+    color: var(--text-gray);
     text-decoration: none;
     border: none;
     min-width: 60px;
@@ -286,7 +287,7 @@ input[type='text']:focus,input[type='password']:focus {
 
 *.caption {
     font-size: 0.9em;
-    color: #999;
+    color: var(--caption-gray);
 }
 a.caption {
     text-decoration: underline;

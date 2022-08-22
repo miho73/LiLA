@@ -28,7 +28,6 @@ public class MainController {
 
     private String sitemap, robots;
 
-    @Autowired AuthService authService;
     @Autowired SessionService sessionService;
 
     @PostConstruct
