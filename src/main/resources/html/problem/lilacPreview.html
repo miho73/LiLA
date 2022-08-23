@@ -5,6 +5,7 @@
         <title>LiLAC Preview</title>
         <th:block th:replace="fragments/header.html :: header"></th:block>
         <link rel="stylesheet" href="/static/styles/problem.css">
+        <link rel="stylesheet" href="/static/styles/lilac.css">
     </head>
     <body style="padding: 30px">
         <textarea id="ta" style="width:700px;height:500px;">
@@ -14,6 +15,8 @@ Plain
 **Bold**
 ***Bold Italic***
 --Strike--
+__underscore__
+a,,n,,^^2^^
 
 [(+5)1.6em]
 [(-5)0.6em]
@@ -23,7 +26,17 @@ Plain
 > > .
 > > > .
 > >.
->.
+> .
+
+> Plain
+> *Italic*
+> **Bold**
+> ***Bold Italic***
+> --Strike--
+> __underscore__
+> a,,n,,^^2^^
+> [(+5)1.6em]
+> [(-5)0.6em]
 
 == 순서 없는 리스트 ==
 * Everland Resort
@@ -73,7 +86,7 @@ $y=ax^2+bx+c$
 
 == 박스 ==
 div
-봄나무, 이상국
+[(+3)**봄나무, 이상국**]
 나무는 몸이 아팠다
 눈보라에 상처를 입은 곳이나
 빗방울들에게 얻어맞앗던 곳들이
@@ -89,6 +102,10 @@ div
 그런 마음의 헌데 자리가 아플 때마다
 그는 하나씩 이파리를 피웠다
 /div
+fold(Open/Close)
+사랑해요
+진짜로요
+/fold
 fold(Open/Close)
 조선국 세종대왕 즉위 십오년에 홍회문 밖에 한 재상이 있으되, 성은 홍이요, 명은 문이니, 위인이 청렴강직하여 덕망이 거룩하니 당세의 영웅이라. 일찍 용문에 올라 벼슬이 한림에 처하였더니 명망이 조정의 으뜸 되매, 전하 그 덕망을 승히 여기사 벼슬을 돋우어 이조판서로 좌의정을 하게 하시니, 승상이 국은을 감동하여 갈충보국하니 사방에 일이 업고 도적이 없으매 시화연풍하여 나라가 태평하더라.
 
@@ -909,7 +926,7 @@ fold(Open/Close)
         <br>
         <button onclick="reload()">reload</button>
         <hr>
-        <div id="preview" style="border: 1px solid #888;"></div>
+        <div id="preview" style="border: 1px solid #888; padding: 20px;"></div>
     </body>
     <script>
         function reload() {

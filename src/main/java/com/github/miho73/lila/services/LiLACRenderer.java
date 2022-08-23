@@ -51,17 +51,17 @@ public class LiLACRenderer {
                 // 하이퍼링크 적용
                 .replaceAll(link,          "<a href=\"$1\" class=\"lilac-link\" target=\"_blank\">$2</a>")
                 // 이미지 적용
-                .replaceAll(ext_image,     "<img src=\"$1\">")
-                .replaceAll(loc_image,     "<img src=\"/problems/resources/get/$1\">");
+                .replaceAll(ext_image,     "<img class=\"lilac-img\" src=\"$1\">")
+                .replaceAll(loc_image,     "<img class=\"lilac-img\" src=\"/problems/resources/get/$1\">");
 
         // 박스 적용
         lilac = box_open.matcher(lilac)  .replaceAll("\0<div class=\"lilac-box\">");
         lilac = box_close.matcher(lilac) .replaceAll("\0</div>");
-        lilac = fold_open.matcher(lilac) .replaceAll("\0<details open-text=\"$2\"><summary>$1</summary>");
+        lilac = fold_open.matcher(lilac) .replaceAll("\0<details class=\"lilac-fold\"><summary open=\"$1\" close=\"$2\" class=\"lilac-fold-txt\"></summary>");
         lilac = fold_close.matcher(lilac).replaceAll("\0</details>");
 
         // 섹션 적용
-        lilac = section.matcher(lilac).replaceAll("\0<h1 class=\"lilac-section\">$1</h1>");
+        lilac = section.matcher(lilac).replaceAll("\0<h1 class=\"lilac-section\">$1</h1><hr class=\"lilac-section-hr\">");
 
         // 텍스트 크기 적용
         lilac = font_size.matcher(lilac).replaceAll(matchResult -> {

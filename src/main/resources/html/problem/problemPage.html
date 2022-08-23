@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>LiLA - 문제 목록</title>
+        <th:block th:replace="fragments/header.html :: header"></th:block>
+        <link rel="stylesheet" href="/static/styles/problem.css">
+    </head>
+    <body>
+        <div class="grid-layout">
+            <th:block th:replace="fragments/base.html :: header-hambuger"></th:block>
+            <th:block th:replace="fragments/base.html :: header-nav"></th:block>
+            <section class="container">
+                <p class="problem-title"></p>
+                <div class="problem-content"></div>
+                <div class="problem-answer"></div>
+                <div class="problem-answer-field"></div>
+                <div class="notice"></div>
+            </section>
+            <th:block th:replace="fragments/base.html :: footer"></th:block>
+        </div>
+    </body>
+</html>
