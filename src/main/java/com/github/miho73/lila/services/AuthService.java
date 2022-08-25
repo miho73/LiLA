@@ -128,7 +128,7 @@ public class AuthService {
             logger.info("Auth completed of user " + userId);
         } catch (Exception e) {
             if(userDatabase != null) {
-                logger.error("Failed to create user into database. Transaction was rollbacked.", e);
+                logger.error("Failed to create user into database. Transaction was rolled back.", e);
                 userRepository.rollbackAndClose(userDatabase);
             }
             logger.error("Failed to create user into database. Connection is not initiated.", e);
