@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title th:if="${newProblem}">새 문제 만들기</title>
+        <title th:unless="${newProblem}" th:text="${pCode+'번 문제 수정'}"></title>
+        <th:block th:replace="fragments/header.html :: header"></th:block>
+        <link rel="stylesheet" href="/static/styles/problem.css">
+        <link rel="stylesheet" href="/static/styles/lilac.css">
+        <link rel="stylesheet" data-name="vs/editor/editor.main" href="//cdn.lucys.r-e.kr/monaco-editor/min/vs/editor/editor.main.css"/>
+        <link href="//cdn.jsdelivr.net/gh/wan2land/d2coding/d2coding-ligature-full.css" rel="stylesheet"/>
+        <script>var require = {paths: {'vs': '//cdn.lucys.r-e.kr/monaco-editor/min/vs'}};</script>
+        <script src="//cdn.lucys.r-e.kr/monaco-editor/min/vs/loader.js"></script>
+        <script src="//cdn.lucys.r-e.kr/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+        <script src="//cdn.lucys.r-e.kr/monaco-editor/min/vs/editor/editor.main.js"></script>
+        <script src="/static/scripts/lilac/monaco-lilac.js"></script>
+        <script src="/static/scripts/problem/problemSettings.js"></script>
+    </head>
+    <body>
+        <th:block th:replace="fragments/base.html :: header-hambuger"></th:block>
+        <th:block th:replace="fragments/base.html :: header-nav"></th:block>
+        <section class="container">
+            <h1 class="section-header" th:if="${newProblem}">새 문제 만들기</h1>
+            <h1 class="section-header" th:unless="${newProblem}" th:text="${pCode+'번 문제 수정'}"></h1>
+            <div class="vertical-align problem-header">
+                <input id="name" type="text" title="문제 제목">
+                <div class="horizontal-align">
+                <select id="difficulty" title="난이도">
+                    <option disabled selected>난이도</option>
+                    <option>Not set</option>
+                    <option>Unrated</option>
+                    <option>Bronze</option>
+                    <option>Silver</option>
+                    <option>Gold</option>
+                    <option>Amber</option>
+                    <option>Crystal</option>
+                    <option>Emerald</option>
+                    <option>Sapphire</option>
+                    <option>Ruby</option>
+                    <option>Diamond</option>
+                </select>
+                <select id="branch" title="분야">
+                    <option disabled selected>분야</option>
+                    <option>일반</option>
+                    <optgroup label="수학">
+                        <option>대수</option>
+                        <option>조합</option>
+                        <option>기하</option>
+                        <option>정수</option>
+                    </optgroup>
+                    <optgroup label="과학">
+                        <option>물리학</option>
+                        <option>화학</option>
+                        <option>생물학</option>
+                    </optgroup>
+                </select>
+            </div>
+            </div>
+            <div class="block">
+                <h3 class="block-header">문제 내용*</h3>
+                <div class="glow">
+                    <div id="content" class="editor"></div>
+                </div>
+            </div>
+            <div class="block">
+                <h3 class="block-header">풀이*</h3>
+                <div class="glow">
+                    <div id="solution" class="editor"></div>
+                </div>
+            </div>
+            <div class="block">
+                <h3 class="block-header">정답*</h3>
+            </div>
+            <div class="block">
+                <h3 class="block-header">설정</h3>
+                <div class="vertical-align glow">
+                    <fieldset class="horizontal">
+                        <input type="checkbox" id="s1" checked title="채점 가능">
+                        <label for="s1">채점 가능</label>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="block">
+                <h3 class="block-header">태그</h3>
+                <div class="vertical-align glow">
+                    <fieldset class="horizontal">
+                        <input type="checkbox" id="o1" title="세트형">
+                        <label for="o1">세트형</label>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="block">
+                <h3 class="block-header">미리보기</h3>
+                <div id="preview" class="glow">
+                    <i style="color: var(--caption-gray)">문제 미리보기가 여기 표시됩니다.</i>
+                </div>
+            </div>
+            <div class="block horizontal-align">
+                <button class="button" onclick="create()" th:if="${newProblem}">Create</button>
+                <button class="button" onclick="update()" th:unless="${newProblem}">Update</button>
+                <button class="button" onclick="preview()">Preview</button>
+            </div>
+        </section>
+        <th:block th:replace="fragments/base.html :: footer"></th:block>
+    </body>
+    <th:block th:replace="fragments/modules.html :: math"></th:block>
+    <script>
+        const vContent = new monaco.editor.create(document.getElementById('content'), setLilac('== 문제 =='));
+        const vSolution = new monaco.editor.create(document.getElementById('solution'), setLilac('== 풀이 ==\n\n== 정답 =='));
+    </script>
+</html>

@@ -75,3 +75,14 @@ div.problem-color {
         font-size: 0.9em;
     }
 }
+
+/* Create / Edit problem page style */
+input[type='text'] {
+    width: 40%;
+}
+button {
+    font-size: 1em;
+}
+div.problem-header {
+    margin: 10px 0;
+}

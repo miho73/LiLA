@@ -1,6 +1,6 @@
 /** LiLAC CSS **/
 
-h1,h2,h3,h4,h5,h6,span,p,td {
+:is(h1,h2,h3,h4,h5,h6,span,p,td).lilac {
     line-break: anywhere;
     font-weight: 400;
     font-size: 1em;
@@ -72,7 +72,7 @@ table.lilac-table {
     border-collapse: collapse;
     margin-bottom: 10px;
 }
-td {
+td.lilac-td {
     border: 1px var(--border-gray) solid;
     padding: 5px;
 }

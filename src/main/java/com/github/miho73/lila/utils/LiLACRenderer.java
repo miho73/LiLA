@@ -1,4 +1,4 @@
-package com.github.miho73.lila.services;
+package com.github.miho73.lila.utils;
 
 import com.github.miho73.lila.objects.Exception.LiLACParsingException;
 import org.apache.commons.lang3.StringUtils;
@@ -41,13 +41,13 @@ public class LiLACRenderer {
                 .replaceAll("\\[lf]", "<br>")
                 .replaceAll("---",    "<hr class=\\\"lilac-hr\\\">")
                 // 텍스트 데코레이션
-                .replaceAll(bold_n_italic, "<span class=\"lilac-bold lilac-italic\">$1</span>")
-                .replaceAll(italic,        "<span class=\"lilac-italic\">$1</span>")
-                .replaceAll(bold,          "<span class=\"lilac-bold\">$1</span>")
-                .replaceAll(underline,     "<span class=\"lilac-underline\">$1</span>")
-                .replaceAll(strike,        "<span class=\"lilac-strike\">$1</span>")
-                .replaceAll(superscript,   "<sup class=\"lilac-super\">$1</sup>")
-                .replaceAll(subscript,     "<sub class=\"lilac-sub\">$1</sub>")
+                .replaceAll(bold_n_italic, "<span class=\"lilac lilac-bold lilac-italic\">$1</span>")
+                .replaceAll(italic,        "<span class=\"lilac lilac-italic\">$1</span>")
+                .replaceAll(bold,          "<span class=\"lilac lilac-bold\">$1</span>")
+                .replaceAll(underline,     "<span class=\"lilac lilac-underline\">$1</span>")
+                .replaceAll(strike,        "<span class=\"lilac lilac-strike\">$1</span>")
+                .replaceAll(superscript,   "<sup  class=\"lilac-super\">$1</sup>")
+                .replaceAll(subscript,     "<sub  class=\"lilac-sub\">$1</sub>")
                 // 하이퍼링크 적용
                 .replaceAll(link,          "<a href=\"$1\" class=\"lilac-link\" target=\"_blank\">$2</a>")
                 // 이미지 적용
@@ -61,11 +61,11 @@ public class LiLACRenderer {
         lilac = fold_close.matcher(lilac).replaceAll("\0</details>");
 
         // 섹션 적용
-        lilac = section.matcher(lilac).replaceAll("\0<h1 class=\"lilac-section\">$1</h1><hr class=\"lilac-section-hr\">");
+        lilac = section.matcher(lilac).replaceAll("\0<h1 class=\"lilac lilac-section\">$1</h1><hr class=\"lilac-section-hr\">");
 
         // 텍스트 크기 적용
         lilac = font_size.matcher(lilac).replaceAll(matchResult -> {
-            return "<span style=\"font-size: "+Math.floor(Integer.parseInt(matchResult.group(1))+11)/10+"em;\">"+matchResult.group(2)+"</span>";
+            return "<span class=\"lilac\" style=\"font-size: "+Math.floor(Integer.parseInt(matchResult.group(1))+11)/10+"em;\">"+matchResult.group(2)+"</span>";
         });
 
         String[] lines = lilac.split("\n");
@@ -110,7 +110,7 @@ public class LiLACRenderer {
 
                 // 인용문 처리가 진행중이면 추가
                 if(multilineStatus == 1) {
-                    html.add("<p>"+line.substring(6)+"</p>");
+                    html.add("<p class=\"lilac\">"+line.substring(6)+"</p>");
                 }
                 // 내 것이 아닌 다중문 처리가 진행중이면 오류
                 else if(multilineStatus != 0b1) {
@@ -159,12 +159,12 @@ public class LiLACRenderer {
                     String lineBody = table_capture.matcher(StringUtils.chop(line)).replaceAll(matchResult -> {
                        if(matchResult.group(1) == null) {
                            String contentEscape = Matcher.quoteReplacement(matchResult.group(2));
-                           return "<td class=\"lila-td\">"+contentEscape+"</td>";
+                           return "<td class=\"lilac lilac-td\">"+contentEscape+"</td>";
                        }
                        else {
                            String director = matchResult.group(1);
                            String contentEscape = Matcher.quoteReplacement(matchResult.group(2));
-                           return "<td class=\"lila-td\" "+
+                           return "<td class=\"lilac lila-td\" "+
                                    (director.charAt(1) == '-' ? "colspan=\"" : "rowspan=\"")+
                                    director.substring(2, director.length()-1)+
                                    "\">"+
