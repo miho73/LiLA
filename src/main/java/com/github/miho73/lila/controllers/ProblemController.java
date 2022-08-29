@@ -8,6 +8,8 @@ import com.github.miho73.lila.services.SessionService;
 import com.github.miho73.lila.utils.RestfulResponse;
 import com.github.miho73.lila.utils.Verifiers;
 import org.json.HTTP;
+import org.json.JSONObject;
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Media;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -54,7 +58,7 @@ public class ProblemController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseBody
-    public String createProblemPost(@RequestBody Map<String, Object> requestBody) {
+    public String createProblemPost(HttpServletResponse response, @RequestBody Map<String, Object> requestBody) {
         try {
             Problem problem = new Problem();
             problem.setName(requestBody.get("problem_name").toString());
@@ -63,48 +67,116 @@ public class ProblemController {
             problem.setDifficulty((int)requestBody.get("difficulty")-1);
             problem.setContent(requestBody.get("content").toString());
             problem.setSolution(requestBody.get("solution").toString());
+            problem.setStatus((int)requestBody.get("state"));
+            problem.setAnswer(requestBody.get("answer").toString());
 
-            //TODO: get client data
-            problem.setAnswer("");
-            problem.setStatus(Problem.PROBLEM_STATUS.CORRECTING);
 
             // Verify parameters
             if(!Verifiers.inRange(problem.getName().length(), 50, 1)) {
                 logger.warn("Cannot create problem: problem name length out of bound");
+                response.setStatus(400);
                 return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Problem name has illegal length");
             }
+            problem.setName(problem.getName().replace("<", "&lt;").replace(">", "&gt;"));
 
             problemService.createProblem(problem);
         } catch (NullPointerException e) {
             logger.error("Cannot create problem", e);
+            response.setStatus(400);
             return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Missing parameter(s)");
         } catch (ClassCastException e) {
             logger.warn("Cannot create problem", e);
+            response.setStatus(400);
             return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Unexpected parameter type");
         } catch (IllegalStateException e) {
             logger.warn("Cannot create problem", e);
+            response.setStatus(400);
             return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Illegal state for branch and/or difficulty");
         } catch (SQLException e) {
-            logger.warn("Cannot create problem", e);
+            logger.error("Cannot create problem", e);
+            response.setStatus(500);
             return RestfulResponse.responseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+        } catch (LiLACParsingException e) {
+            response.setStatus(400);
+            return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "LiLAC cannot be compiled: "+e.getMessage());
+        } catch (Exception e) {
+            logger.error("Cannot create problem", e);
+            response.setStatus(500);
+            return RestfulResponse.responseResult(HttpStatus.INTERNAL_SERVER_ERROR, "Unknown error");
         }
         return RestfulResponse.responseResult(HttpStatus.CREATED, problemService.PROBLEM_COUNT);
     }
 
 
+    @GetMapping("/update/{problem_code}")
+    public String updateProblem(Model model, HttpSession session, HttpServletResponse response,
+                                @PathVariable("problem_code") int problem_code) throws SQLException {
+        sessionService.loadIdentity(model, session);
+        model.addAttribute("newProblem", false);
+        model.addAttribute("problemCode", problem_code);
+        return "problem/problemSettings";
+    }
+
+
+    @GetMapping("/solve/{problem_code}")
+    public String solveProblem(Model model, HttpSession session, HttpServletResponse response,
+                               @PathVariable("problem_code") int problem_code) throws Exception {
+        sessionService.loadIdentity(model, session);
+        Problem problem = problemService.getProblem(problem_code);
+        if(problem == null) {
+            response.sendError(404);
+            return null;
+        }
+        model.addAllAttributes(Map.of(
+                "code", problem.getCode(),
+                "name", problem.getName(),
+                "content", problem.getHtmlContent(),
+                "solution", problem.getHtmlSolution(),
+                "active", problem.getStatus()
+        ));
+        return "problem/problemPage";
+    }
+
+
+    @GetMapping(value = "/get",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @ResponseBody
+    public String getProblem(HttpSession session,
+                             @RequestParam("problem-code") int problem_code) {
+        try {
+            Problem problem = problemService.getProblem(problem_code);
+            if(problem == null) {
+                return RestfulResponse.responseResult(HttpStatus.NOT_FOUND, "no problem with code "+problem_code+" was found");
+            }
+            JSONObject resp = new JSONObject();
+            resp.put("code", problem.getCode());
+            resp.put("name", problem.getName());
+            resp.put("content", problem.getContent());
+            resp.put("solution", problem.getSolution());
+            resp.put("branch", problem.getBranchCode());
+            resp.put("difficulty", problem.getDifficultyCode());
+            resp.put("state", problem.getStatusCode());
+            resp.put("tags", problem.getTag());
+            return RestfulResponse.responseResult(HttpStatus.OK, resp);
+        } catch (Exception e) {
+            return RestfulResponse.responseResult(HttpStatus.INTERNAL_SERVER_ERROR, "Database error.");
+        }
+    }
     @PostMapping(
             value = "/lilac/compile",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
-    public String compileLilac(@RequestBody Map<String,String> requestBody) {
+    public String compileLilac(HttpServletResponse response, @RequestBody Map<String,String> requestBody) {
         try {
             if(requestBody.get("lilac") == null) {
+                response.setStatus(400);
                 return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Given LiLAC code is null");
             }
             String html = LiLACRenderer.render(requestBody.get("lilac"));
             return RestfulResponse.responseResult(HttpStatus.OK, html);
         } catch (LiLACParsingException e) {
+            response.setStatus(500);
             return RestfulResponse.responseMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }

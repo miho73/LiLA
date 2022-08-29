@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <title th:if="${newProblem}">새 문제 만들기</title>
-        <title th:unless="${newProblem}" th:text="${pCode+'번 문제 수정'}"></title>
+        <title th:unless="${newProblem}" th:text="${problem_code+'번 문제 수정'}"></title>
         <th:block th:replace="fragments/header.html :: header"></th:block>
         <link rel="stylesheet" href="/static/styles/problem.css">
         <link rel="stylesheet" href="/static/styles/lilac.css">
@@ -18,11 +18,11 @@
         <script src="/static/scripts/problem/problemSettings.js"></script>
     </head>
     <body>
-        <th:block th:replace="fragments/base.html :: header-hambuger"></th:block>
+        <th:block th:replace="fragments/base.html :: header-hamburger"></th:block>
         <th:block th:replace="fragments/base.html :: header-nav"></th:block>
         <section class="container">
             <h1 class="section-header" th:if="${newProblem}">새 문제 만들기</h1>
-            <h1 class="section-header" th:unless="${newProblem}" th:text="${pCode+'번 문제 수정'}"></h1>
+            <h1 class="section-header" th:unless="${newProblem}" th:text="${problem_code+'번 문제 수정'}"></h1>
             <div class="vertical-align problem-header">
                 <input id="name" type="text" title="문제 제목">
                 <div class="horizontal-align">
@@ -54,6 +54,13 @@
                         <option>화학</option>
                         <option>생물학</option>
                     </optgroup>
+                </select>
+                <select id="status" title="상태">
+                    <option disabled selected>상태</option>
+                    <option>열림</option>
+                    <option>검토중</option>
+                    <option>제출 불가</option>
+                    <option>공개되지 않음</option>
                 </select>
             </div>
             </div>
@@ -91,16 +98,36 @@
                 </div>
             </div>
             <div class="block horizontal-align">
-                <button class="button" onclick="create()" th:if="${newProblem}">Create</button>
-                <button class="button" onclick="update()" th:unless="${newProblem}">Update</button>
-                <button class="button" onclick="preview()">Preview</button>
+                <button id="commit" class="button" onclick="create()" th:if="${newProblem}">Create</button>
+                <button id="update" class="button" onclick="update()" th:unless="${newProblem}">Update</button>
+                <button id="previw" class="button" onclick="preview()">Preview</button>
             </div>
         </section>
         <th:block th:replace="fragments/base.html :: footer"></th:block>
+        <th:block th:replace="fragments/modules.html :: notification"></th:block>
     </body>
     <th:block th:replace="fragments/modules.html :: math"></th:block>
     <script>
         const vContent = new monaco.editor.create(document.getElementById('content'), setLilac('== 문제 =='));
         const vSolution = new monaco.editor.create(document.getElementById('solution'), setLilac('== 풀이 ==\n\n== 정답 =='));
+    </script>
+    <script th:unless="${newProblem}">
+        axios.get('/problems/get?problem-code=[[${problem_code}]]')
+        .then(resp => {
+            if(resp.data.result.code != [[${problem_code}]]) {
+                notification('문제를 불러오지 못했습니다.', '요청한 문제에 대한 응답을 받지 못했습니다.', 2);
+                return;
+            }
+            gei('name').value = resp.data.result.name;
+            gei('difficulty').selectedIndex = resp.data.result.difficulty;
+            gei('branch').selectedIndex = resp.data.result.branch;
+            gei('status').selectedIndex = resp.data.result.state;
+            vContent.setValue(resp.data.result.content);
+            vSolution.setValue(resp.data.result.solution);
+            //TODO: add tag setter
+        })
+        .catch(error => {
+            notification('문제를 불러오지 못했습니다.', axiosError(error), 2);
+        });
     </script>
 </html>

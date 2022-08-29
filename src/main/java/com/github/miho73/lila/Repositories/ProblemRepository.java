@@ -47,4 +47,32 @@ public class ProblemRepository extends Database {
         rs.next();
         return rs.getInt("cnt");
     }
+
+    public Problem getProblem(Connection connection, int problemCode) throws SQLException {
+        String sql = "SELECT * FROM problems WHERE problem_code=?;";
+
+        PreparedStatement psmt = connection.prepareStatement(sql);
+        psmt.setInt(1, problemCode);
+
+        ResultSet rs = psmt.executeQuery();
+        if(!rs.next()) {
+            logger.warn("problem with code "+problemCode+" was not found.");
+            return null;
+        }
+
+        Problem problem = new Problem();
+        problem.setCode(rs.getInt("problem_code"));
+        problem.setName(rs.getString("problem_name"));
+        problem.setContent(rs.getString("content"));
+        problem.setHtmlContent(rs.getString("html_content"));
+        problem.setSolution(rs.getString("solution"));
+        problem.setHtmlSolution(rs.getString("html_solution"));
+        problem.setAnswer(rs.getString("answer"));
+        problem.setTag(rs.getInt("tags"));
+        problem.setDifficulty(rs.getInt("difficulty"));
+        problem.setBranch(rs.getInt("branch"));
+        problem.setStatus(rs.getInt("status"));
+
+        return problem;
+    }
 }

@@ -1,6 +1,7 @@
 package com.github.miho73.lila.services;
 
 import com.github.miho73.lila.Repositories.ProblemRepository;
+import com.github.miho73.lila.objects.Exception.LiLACParsingException;
 import com.github.miho73.lila.objects.Problem;
 import com.github.miho73.lila.utils.LiLACRenderer;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public class ProblemService {
         }
     }
 
-    public void createProblem(Problem problem) throws SQLException {
+    public void createProblem(Problem problem) throws SQLException, LiLACParsingException {
         Connection connection = problemRepository.openConnectionForEdit();
         try {
             problem.setHtmlContent(LiLACRenderer.render(problem.getContent()));
@@ -49,6 +50,17 @@ public class ProblemService {
                 logger.error("Failed to create problem. Transaction was rolled back", e);
             }
             logger.error("Failed to create problem. Transaction was not initiated", e);
+            throw e;
+        }
+    }
+
+    public Problem getProblem(int problemCode) throws SQLException {
+        try {
+            Connection connection = problemRepository.openConnection();
+            return problemRepository.getProblem(connection, problemCode);
+        } catch (Exception e) {
+            logger.error("Failed to query problem from database", e);
+            throw e;
         }
     }
 }

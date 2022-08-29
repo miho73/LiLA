@@ -195,7 +195,7 @@ ML.registerCompletionItemProvider('lilac', {
 });
 
 monaco.editor.defineTheme('lilac-theme', {
-    base: 'vs-light',
+    base: 'vs',
     inherit: true,
     rules: [
         {token: 'section', foreground: '#A5D3EB'},
@@ -208,7 +208,7 @@ monaco.editor.defineTheme('lilac-theme', {
         {token: 'define', foreground: '#1C8FFF'},
         {token: 'function', foreground: '#1889FC'},
         {token: 'control', foreground: '#ABABAB', fontStyle: 'italic'},
-        {token: 'text', foreground: '#F0F0F0'},
+        {token: 'text', foreground: '#222222'},
         {token: 'invalid', fontStyle: 'underline'}
     ],
     colors: {

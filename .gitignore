@@ -142,3 +142,5 @@ out/
 ### VS Code ###
 .vscode/
 *.code-workspace
+
+.babelrc

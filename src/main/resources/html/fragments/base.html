@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
-    <th:block th:fragment="header-hambuger">
-        <div class="hambuger-menu transition on-mobile" id="hambuger-menu">
-            <div class="hambuger-casing">
-                <div class="space-between hambuger-header">
+    <th:block th:fragment="header-hamburger">
+        <div class="hamburger-menu transition on-mobile" id="hamburger-menu">
+            <div class="hamburger-casing">
+                <div class="space-between hamburger-header">
                     <p></p>
-                    <button class="nav-hambuger on-mobile" title="메뉴" onclick="closeHambuger()">
+                    <button class="nav-hamburger on-mobile" title="메뉴" onclick="closehamburger()">
                         <img src="/static/images/icon/x.svg">
                     </button>
                 </div>
@@ -21,7 +21,7 @@
                     <a class="hide nav-link transition block fill" href="/profile" th:if="${login}" th:text="${username}"></a>
                     <a class="hide nav-link transition block fill" href="/settings" th:if="${login}">설정</a>
                 </div>
-                <div class="hambuger-footer">
+                <div class="hamburger-footer">
                     <p>LiLA</p>
                 </div>
             </div>
@@ -34,8 +34,8 @@
                 <h1>
                     <a href="/" class="hide home-link">LiLA</a>
                 </h1>
-                <button class="nav-hambuger on-mobile" title="메뉴" onclick="openHambuger()">
-                    <img src="/static/images/icon/hambuger.svg">
+                <button class="nav-hamburger on-mobile" title="메뉴" onclick="openhamburger()">
+                    <img src="/static/images/icon/hamburger.svg">
                 </button>
                 <div class="on-pc nav-links">
                     <a href="/problems" class="hide nav-link transition">문제</a>
