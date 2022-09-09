@@ -126,7 +126,7 @@ public class LiLACRenderer {
 
                 // 처리중 > 추가
                 if(multilineStatus >> 1 == 1) {
-                    html.add("<li>"+line.substring(2)+"</li>");
+                    html.add("<li class=\"lilac\">"+line.substring(2)+"</li>");
                 }
                 else if(multilineStatus != 0b10) {
                     throw new LiLACParsingException("Cannot overlap multiline object(while processing ordered list). Line "+lineNo);
@@ -141,7 +141,7 @@ public class LiLACRenderer {
 
                 // 처리중 > 추가
                 if(multilineStatus >> 2 == 1) {
-                    html.add("<li>"+line.substring(2)+"</li>");
+                    html.add("<li class=\"lilac\">"+line.substring(2)+"</li>");
                 }
                 else if(multilineStatus != 0b100) {
                     throw new LiLACParsingException("Cannot overlap multiline object(while processing unordered list). Line "+lineNo);
@@ -179,7 +179,7 @@ public class LiLACRenderer {
                 }
             }
             //아무것도 해당되지 않으면 일반 텍스트 라인으로 간주. p태그 걸어줌
-            else html.add("<p>"+line+"</p>");
+            else html.add("<p class=\"lilac\">"+line+"</p>");
         }
 
         StringBuilder finalHtml = new StringBuilder();

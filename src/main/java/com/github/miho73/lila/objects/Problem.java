@@ -167,10 +167,10 @@ public class Problem {
 
     public void setStatus(int status) {
         this.status = switch (status) {
-            case 1 -> PROBLEM_STATUS.OPEN;
-            case 2 -> PROBLEM_STATUS.CORRECTING;
-            case 3 -> PROBLEM_STATUS.NOT_SUBMITTABLE;
-            case 4 -> PROBLEM_STATUS.UNPUBLISHED;
+            case 0 -> PROBLEM_STATUS.OPEN;
+            case 1 -> PROBLEM_STATUS.CORRECTING;
+            case 2 -> PROBLEM_STATUS.NOT_SUBMITTABLE;
+            case 3 -> PROBLEM_STATUS.UNPUBLISHED;
             default -> throw new IllegalStateException("Unexpected value: " + status);
         };
     }

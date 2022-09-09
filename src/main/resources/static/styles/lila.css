@@ -449,3 +449,12 @@ div.editor {
     min-height: 300px;
     height: fit-content;
 }
+
+/* problem tags */
+span.ptag {
+    border: 1px solid var(--border-gray);
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin: 0 2px;
+    user-select: none;
+}

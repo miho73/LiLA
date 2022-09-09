@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Map;
 
 @Controller("ProblemController")
@@ -63,8 +64,8 @@ public class ProblemController {
             Problem problem = new Problem();
             problem.setName(requestBody.get("problem_name").toString());
             problem.setTag((int)requestBody.get("tags"));
-            problem.setBranch((int)requestBody.get("branch")-1);
-            problem.setDifficulty((int)requestBody.get("difficulty")-1);
+            problem.setBranch((int)requestBody.get("branch"));
+            problem.setDifficulty((int)requestBody.get("difficulty"));
             problem.setContent(requestBody.get("content").toString());
             problem.setSolution(requestBody.get("solution").toString());
             problem.setStatus((int)requestBody.get("state"));
@@ -110,11 +111,68 @@ public class ProblemController {
 
     @GetMapping("/update/{problem_code}")
     public String updateProblem(Model model, HttpSession session, HttpServletResponse response,
-                                @PathVariable("problem_code") int problem_code) throws SQLException {
+                                @PathVariable("problem_code") int problem_code) throws Exception {
         sessionService.loadIdentity(model, session);
         model.addAttribute("newProblem", false);
         model.addAttribute("problemCode", problem_code);
         return "problem/problemSettings";
+    }
+    @PutMapping(
+            value = "/update/{problem_code}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseBody
+    public String updateProblemPost(HttpServletResponse response,
+                                    @PathVariable("problem_code") int problem_code,
+                                    @RequestBody Map<String, Object> requestBody) {
+        try {
+            Problem problem = new Problem();
+            problem.setName(requestBody.get("problem_name").toString());
+            problem.setTag((int)requestBody.get("tags"));
+            problem.setBranch((int)requestBody.get("branch"));
+
+            problem.setDifficulty((int)requestBody.get("difficulty"));
+            problem.setContent(requestBody.get("content").toString());
+            problem.setSolution(requestBody.get("solution").toString());
+            problem.setStatus((int)requestBody.get("state"));
+            problem.setAnswer(requestBody.get("answer").toString());
+
+
+            // Verify parameters
+            if(!Verifiers.inRange(problem.getName().length(), 50, 1)) {
+                logger.warn("Cannot update problem code "+problem_code+": problem name length out of bound");
+                response.setStatus(400);
+                return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Problem name has illegal length");
+            }
+            problem.setName(problem.getName().replace("<", "&lt;").replace(">", "&gt;"));
+
+            problemService.updateProblem(problem_code, problem);
+        } catch (NullPointerException e) {
+            logger.error("Cannot update problem", e);
+            response.setStatus(400);
+            return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Missing parameter(s)");
+        } catch (ClassCastException e) {
+            logger.warn("Cannot update problem", e);
+            response.setStatus(400);
+            return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Unexpected parameter type");
+        } catch (IllegalStateException e) {
+            logger.warn("Cannot update problem", e);
+            response.setStatus(400);
+            return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Illegal state for branch and/or difficulty");
+        } catch (SQLException e) {
+            logger.error("Cannot update problem", e);
+            response.setStatus(500);
+            return RestfulResponse.responseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+        } catch (LiLACParsingException e) {
+            response.setStatus(400);
+            return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "LiLAC cannot be compiled: "+e.getMessage());
+        } catch (Exception e) {
+            logger.error("Cannot update problem", e);
+            response.setStatus(500);
+            return RestfulResponse.responseResult(HttpStatus.INTERNAL_SERVER_ERROR, "Unknown error");
+        }
+        return RestfulResponse.responseResult(HttpStatus.OK, problem_code);
     }
 
 
@@ -127,12 +185,19 @@ public class ProblemController {
             response.sendError(404);
             return null;
         }
+        int tagsBit = problem.getTag();
+        boolean[] tags = new boolean[32];
+        Arrays.fill(tags, false);
+        for (int i = 0; i < tags.length; i++)
+            if ((tagsBit & 1 << i) != 0)
+                tags[i] = true;
         model.addAllAttributes(Map.of(
                 "code", problem.getCode(),
                 "name", problem.getName(),
                 "content", problem.getHtmlContent(),
                 "solution", problem.getHtmlSolution(),
-                "active", problem.getStatus()
+                "active", problem.getStatusCode(),
+                "tags", tags
         ));
         return "problem/problemPage";
     }
@@ -142,6 +207,7 @@ public class ProblemController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
     public String getProblem(HttpSession session,
+                             HttpServletResponse response,
                              @RequestParam("problem-code") int problem_code) {
         try {
             Problem problem = problemService.getProblem(problem_code);
@@ -159,6 +225,7 @@ public class ProblemController {
             resp.put("tags", problem.getTag());
             return RestfulResponse.responseResult(HttpStatus.OK, resp);
         } catch (Exception e) {
+            response.setStatus(500);
             return RestfulResponse.responseResult(HttpStatus.INTERNAL_SERVER_ERROR, "Database error.");
         }
     }

@@ -1,3 +1,4 @@
+/* Problem navigation */
 div.prob-nav {
     display: flex;
     flex-direction: row;
@@ -29,7 +30,7 @@ div.prob-search {
     justify-content: flex-end;
 }
 
-
+/* Problem list */
 div.problem-grid {
     margin: 20px 10px;
 }
@@ -57,6 +58,26 @@ div.problem-color {
     height: 100%;
     background: linear-gradient(270deg, red, transparent);
     border-radius: 0 20px 20px 0;
+}
+
+/* Problem solve */
+div.info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: solid var(--bright-lilac);
+    border-width: 0 0 1px 0;
+    padding: 10px 0;
+    margin: -15px 0 10px 0;
+}
+div.notice {
+    margin: 20px 0 10px 0;
+}
+p.problem-notice-error {
+    font-weight: 600;
+    font-size: 1.1em;
+    color: var(--error);
 }
 
 @media (max-width: 800px) {

@@ -63,4 +63,25 @@ public class ProblemService {
             throw e;
         }
     }
+
+    public void updateProblem(int problem_code, Problem problem) throws SQLException, LiLACParsingException {
+        Connection connection = problemRepository.openConnectionForEdit();
+        try {
+            problem.setHtmlContent(LiLACRenderer.render(problem.getContent()));
+            problem.setHtmlSolution(LiLACRenderer.render(problem.getSolution()));
+            problem.setCode(problem_code);
+
+            problemRepository.updateProblem(problem, connection);
+            problemRepository.commitAndClose(connection);
+            PROBLEM_COUNT++;
+            logger.info("Problem "+problem_code+" updated");
+        } catch (Exception e) {
+            if(connection != null) {
+                problemRepository.rollbackAndClose(connection);
+                logger.error("Failed to update problem. Transaction was rolled back", e);
+            }
+            logger.error("Failed to update problem. Transaction was not initiated", e);
+            throw e;
+        }
+    }
 }

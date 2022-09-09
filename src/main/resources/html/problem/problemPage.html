@@ -3,27 +3,40 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
     <head>
         <title th:text="${'LiLA - '+name}"></title>
-        <th:block th:replace="fragments/header.html :: header"></th:block>
+        <th:block th:replace="fragments/header.html :: header"/>
         <link rel="stylesheet" href="/static/styles/problem.css">
         <link rel="stylesheet" href="/static/styles/lilac.css">
     </head>
     <body>
-        <div class="grid-layout" th:unless="${active=='UNPUBLISHED'}">
-            <th:block th:replace="fragments/base.html :: header-hamburger"></th:block>
-            <th:block th:replace="fragments/base.html :: header-nav"></th:block>
-            <section class="container">
+        <div class="grid-layout">
+            <th:block th:replace="fragments/base.html :: header-hamburger"/>
+            <th:block th:replace="fragments/base.html :: header-nav"/>
+            <section class="container" th:unless="${active==3}">
                 <h1 class="problem-title" th:text="${name}"></h1>
+                <div class="info">
+                    <div class="controls">
+
+                    </div>
+                    <div class="tags">
+                        <th:block th:replace="${tags[0]}  ? ~{fragments/tags.html :: 0}  : ~{}"/>
+                        <th:block th:replace="${tags[29]} ? ~{fragments/tags.html :: 29} : ~{}"/>
+                        <th:block th:replace="${tags[30]} ? ~{fragments/tags.html :: 30} : ~{}"/>
+                        <th:block th:replace="${tags[31]} ? ~{fragments/tags.html :: 31} : ~{}"/>
+                    </div>
+                </div>
+                <div class="notice glow" th:unless="${active==0}">
+                    <p th:unless="${active==0}" class="problem-notice-error">이 문제는 제출할 수 없습니다.</p>
+                </div>
                 <div class="problem-content" th:utext="${content}"></div>
                 <div class="problem-answer" th:utext="${solution}"></div>
                 <div class="problem-answer-field"></div>
-                <div class="notice">
-                    <p th:unless="${active=='OPEN'}">이 문제는 제출할 수 없습니다.</p>
-                </div>
             </section>
-            <th:block th:replace="fragments/base.html :: footer"></th:block>
-        </div>
-        <div class="grid-layout" th:if="${active=='UNPUBLISHED'}">
-            <p>비공개된 문제입니다.</p>
+            <section class="container" th:if="${active==3}">
+                <p class="problem-notice-error">비공개된 문제입니다.</p>
+                <br>
+                <a class="button" th:href="${'/problems/update/'+code}">수정</a>
+            </section>
+            <th:block th:replace="fragments/base.html :: footer"/>
         </div>
     </body>
 </html>

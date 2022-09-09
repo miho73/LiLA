@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <title th:if="${newProblem}">새 문제 만들기</title>
         <title th:unless="${newProblem}" th:text="${problem_code+'번 문제 수정'}"></title>
-        <th:block th:replace="fragments/header.html :: header"></th:block>
+        <th:block th:replace="fragments/header.html :: header"/>
         <link rel="stylesheet" href="/static/styles/problem.css">
         <link rel="stylesheet" href="/static/styles/lilac.css">
         <link rel="stylesheet" data-name="vs/editor/editor.main" href="//cdn.lucys.r-e.kr/monaco-editor/min/vs/editor/editor.main.css"/>
@@ -18,8 +18,8 @@
         <script src="/static/scripts/problem/problemSettings.js"></script>
     </head>
     <body>
-        <th:block th:replace="fragments/base.html :: header-hamburger"></th:block>
-        <th:block th:replace="fragments/base.html :: header-nav"></th:block>
+        <th:block th:replace="fragments/base.html :: header-hamburger"/>
+        <th:block th:replace="fragments/base.html :: header-nav"/>
         <section class="container">
             <h1 class="section-header" th:if="${newProblem}">새 문제 만들기</h1>
             <h1 class="section-header" th:unless="${newProblem}" th:text="${problem_code+'번 문제 수정'}"></h1>
@@ -99,14 +99,14 @@
             </div>
             <div class="block horizontal-align">
                 <button id="commit" class="button" onclick="create()" th:if="${newProblem}">Create</button>
-                <button id="update" class="button" onclick="update()" th:unless="${newProblem}">Update</button>
+                <button id="update" class="button" th:onclick="update([[${problem_code}]])" th:unless="${newProblem}">Update</button>
                 <button id="previw" class="button" onclick="preview()">Preview</button>
             </div>
         </section>
-        <th:block th:replace="fragments/base.html :: footer"></th:block>
-        <th:block th:replace="fragments/modules.html :: notification"></th:block>
+        <th:block th:replace="fragments/base.html :: footer"/>
+        <th:block th:replace="fragments/modules.html :: notification"/>
     </body>
-    <th:block th:replace="fragments/modules.html :: math"></th:block>
+    <th:block th:replace="fragments/modules.html :: math"/>
     <script>
         const vContent = new monaco.editor.create(document.getElementById('content'), setLilac('== 문제 =='));
         const vSolution = new monaco.editor.create(document.getElementById('solution'), setLilac('== 풀이 ==\n\n== 정답 =='));
@@ -119,12 +119,27 @@
                 return;
             }
             gei('name').value = resp.data.result.name;
-            gei('difficulty').selectedIndex = resp.data.result.difficulty;
-            gei('branch').selectedIndex = resp.data.result.branch;
-            gei('status').selectedIndex = resp.data.result.state;
+            gei('difficulty').selectedIndex = resp.data.result.difficulty+1;
+            gei('branch').selectedIndex = resp.data.result.branch+1;
+            gei('status').selectedIndex = resp.data.result.state+1;
             vContent.setValue(resp.data.result.content);
             vSolution.setValue(resp.data.result.solution);
-            //TODO: add tag setter
+            var tags = resp.data.result.tags;
+            var pow = 1;
+            while(true) {
+                if(pow == 30) break;
+                
+                if(tags % 2 == 1) {
+                    gei(`o${pow}`).checked = true;
+                    if(tags == 1) break;
+                    tags = (tags-1)/2;
+                }
+                else {
+                    if(tags == 0) break;
+                    tags /= 2;
+                }
+                pow++;
+            }
         })
         .catch(error => {
             notification('문제를 불러오지 못했습니다.', axiosError(error), 2);

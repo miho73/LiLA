@@ -75,4 +75,31 @@ public class ProblemRepository extends Database {
 
         return problem;
     }
+
+    public void updateProblem(Problem problem, Connection connection) throws SQLException {
+        try {
+            String sql = "UPDATE problems SET problem_name=?, content=?, html_content=?, solution=?, html_solution=?, answer=?, tags=?, difficulty=?, branch=?, status=? WHERE problem_code=?;";
+
+            PreparedStatement psmt = connection.prepareStatement(sql);
+
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+            psmt.setString(1, problem.getName());
+            psmt.setString(2, problem.getContent());
+            psmt.setString(3, problem.getHtmlContent());
+            psmt.setString(4, problem.getSolution());
+            psmt.setString(5, problem.getHtmlSolution());
+            psmt.setString(6, problem.getAnswer());
+            psmt.setInt(7, problem.getTag());
+            psmt.setInt(8, problem.getDifficultyCode());
+            psmt.setInt(9, problem.getBranchCode());
+            psmt.setInt(10, problem.getStatusCode());
+            psmt.setInt(11, problem.getCode());
+
+            psmt.execute();
+        } catch (SQLException e) {
+            logger.error("SQLException: Cannot update problem to database.", e);
+            throw e;
+        }
+    }
 }

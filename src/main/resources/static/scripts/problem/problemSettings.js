@@ -52,10 +52,10 @@ function create() {
     }
 }
 
-function update() {
+function update(problem_code) {
     if(validate()) {
         gei('update').disabled = true;
-        axios.post('/problems/update', {
+        axios.put(`/problems/update/${problem_code}`, {
             problem_name: this.name,
             difficulty: this.difficulty,
             branch: this.branch,
@@ -79,19 +79,29 @@ function update() {
 
 function validate() {
     this.name = getValue('name');
-    this.difficulty = gei('difficulty').selectedIndex;
-    this.branch = gei('branch').selectedIndex;
-    this.state = gei('status').selectedIndex;
+    this.difficulty = gei('difficulty').selectedIndex-1;
+    this.branch = gei('branch').selectedIndex-1;
+    this.state = gei('status').selectedIndex-1;
     this.content = vContent.getValue();
     this.solution = vSolution.getValue();
     this.tag = (gei('o1').checked << 0);
+
+    if(state == 1) {
+        this.tag ^= 0b00100000000000000000000000000000;
+    }
+    else if(state == 2) {
+        this.tag ^= 0b01000000000000000000000000000000;
+    }
+    else if(state == 3) {
+        this.tag ^= 0b10000000000000000000000000000000;
+    }
     
     var wasError = false;
     
     wasError = checkSingle(inRange(this.name.length, 50, 1), 'name')        || wasError;
-    wasError = checkSingle(inRange(this.difficulty, 11, 1), 'difficulty')   || wasError;
-    wasError = checkSingle(inRange(this.branch, 8, 1), 'branch')            || wasError;
-    wasError = checkSingle(inRange(this.state, 4, 1), 'status')            || wasError;
+    wasError = checkSingle(inRange(this.difficulty, 10, 0), 'difficulty')   || wasError;
+    wasError = checkSingle(inRange(this.branch, 7, 0), 'branch')            || wasError;
+    wasError = checkSingle(inRange(this.state, 3, 0), 'status')            || wasError;
     
     if(wasError) {
         window.scroll({
@@ -100,8 +110,8 @@ function validate() {
         });
     }
     else {
-        this.name.replace('<', '&#60;')
-        .replace('>', '&#62;');
+        this.name.replaceAll('<', '&#60;')
+                 .replaceAll('>', '&#62;');
     }
 
     return !wasError;
