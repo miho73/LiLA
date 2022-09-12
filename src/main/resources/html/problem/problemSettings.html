@@ -23,24 +23,24 @@
         <section class="container">
             <h1 class="section-header" th:if="${newProblem}">새 문제 만들기</h1>
             <h1 class="section-header" th:unless="${newProblem}" th:text="${problem_code+'번 문제 수정'}"></h1>
-            <div class="vertical-align problem-header">
-                <input id="name" type="text" title="문제 제목">
-                <div class="horizontal-align">
-                <select id="difficulty" title="난이도">
-                    <option disabled selected>난이도</option>
-                    <option>Not set</option>
-                    <option>Unrated</option>
-                    <option>Bronze</option>
-                    <option>Silver</option>
-                    <option>Gold</option>
-                    <option>Amber</option>
-                    <option>Crystal</option>
-                    <option>Emerald</option>
-                    <option>Sapphire</option>
-                    <option>Ruby</option>
-                    <option>Diamond</option>
-                </select>
-                <select id="branch" title="분야">
+                    <div class="vertical-align problem-header">
+                        <input id="name" type="text" title="문제 제목">
+                        <div class="horizontal-align">
+                            <select id="difficulty" title="난이도">
+                                <option disabled selected>난이도</option>
+                                <option>Not set</option>
+                                <option>Unrated</option>
+                                <option>Bronze</option>
+                                <option>Silver</option>
+                                <option>Gold</option>
+                                <option>Amber</option>
+                                <option>Crystal</option>
+                                <option>Emerald</option>
+                                <option>Sapphire</option>
+                                <option>Ruby</option>
+                                <option>Diamond</option>
+                            </select>
+                            <select id="branch" title="분야">
                     <option disabled selected>분야</option>
                     <option>일반</option>
                     <optgroup label="수학">

@@ -7,6 +7,7 @@ import com.github.miho73.lila.services.SessionService;
 import com.github.miho73.lila.utils.LiLACRenderer;
 import com.github.miho73.lila.utils.RestfulResponse;
 import com.github.miho73.lila.utils.Verifiers;
+import io.lettuce.core.dynamic.annotation.Param;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -41,6 +43,19 @@ public class ProblemController {
         return "problem/problemList";
     }
 
+    @GetMapping("/search")
+    public String searchProblem(Model model, HttpSession session,
+                                @RequestParam(value = "q", required = false, defaultValue = "") String query,
+                                @RequestParam(value = "b", required = false, defaultValue = "0") int branch,
+                                @RequestParam(value = "d", required = false, defaultValue = "0") int difficulty,
+                                @RequestParam(value = "s", required = false, defaultValue = "0") int status) throws SQLException {
+
+        List<Problem> searched = problemService.searchProblems(query, branch, difficulty, status);
+
+        sessionService.loadIdentity(model, session);
+        model.addAttribute("problems", searched);
+        return "problem/problemSearch";
+    }
 
     @GetMapping("/create")
     public String createProblem(Model model, HttpSession session, HttpServletResponse response) throws IOException {

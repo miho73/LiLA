@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Service("ProblemService")
@@ -82,5 +84,65 @@ public class ProblemService {
             log.error("Failed to update problem. Transaction was not initiated", e);
             throw e;
         }
+    }
+
+    public List<Problem> searchProblems(String query, int branch, int difficulty, int status) throws SQLException {
+        Connection connection = problemRepository.openConnection();
+
+        boolean[] branchFlag = new boolean[7];
+        boolean[] difficultyFlag = new boolean[10];
+        boolean[] statusFlag = new boolean[4];
+
+        // true when filter enabled
+        for (int i = 0; i < branchFlag.length; i++)
+            branchFlag[i] = (branch & 1 << i) != 0;
+        for (int i = 0; i < difficultyFlag.length; i++)
+            difficultyFlag[i] = (difficulty & 1 << i) != 0;
+        for (int i = 0; i < statusFlag.length; i++)
+            statusFlag[i] = (status & 1 << i) != 0;
+
+        String querySql;
+        StringBuilder flagSql = new StringBuilder(),
+                branchFilter = new StringBuilder("("),
+                difficultyFilter = new StringBuilder("("),
+                statusFilter = new StringBuilder("(");
+
+        // flag sql
+        int idx = 0;
+        for(boolean includeBranch : branchFlag) {
+            if(includeBranch) branchFilter.append("branch=").append(idx).append(" OR ");
+            idx++;
+        }
+        branchFilter.append("false)");
+
+        idx = 0;
+        for(boolean includeDifficulty : difficultyFlag) {
+            if(includeDifficulty) difficultyFilter.append("difficulty=").append(idx).append(" OR ");
+            idx++;
+        }
+        difficultyFilter.append("false)");
+
+        idx = 0;
+        for(boolean includeStatus : statusFlag) {
+            if(includeStatus) statusFilter.append("status=").append(idx).append(" OR ");
+            idx++;
+        }
+        statusFilter.append("false)");
+
+        if(branch != 0) {
+            flagSql.append(branchFilter)
+                   .append(" AND ");
+        }
+        if(difficulty != 0) {
+            flagSql.append(difficultyFilter)
+                   .append(" AND ");
+        }
+        if(status != 0) {
+            flagSql.append(statusFilter)
+                    .append(" AND ");
+        }
+        flagSql.append("true");
+
+        return problemRepository.searchProblems(connection, !query.equals(""), query, flagSql.toString());
     }
 }

@@ -2,9 +2,12 @@ package com.github.miho73.lila.Repositories;
 
 import com.github.miho73.lila.objects.Problem;
 import lombok.extern.slf4j.Slf4j;
+import org.postgresql.util.PSQLException;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.List;
+import java.util.Vector;
 
 @Slf4j
 @Repository
@@ -96,6 +99,45 @@ public class ProblemRepository extends Database {
             psmt.execute();
         } catch (SQLException e) {
             log.error("SQLException: failed to update problem to database.", e);
+            throw e;
+        }
+    }
+
+    public List<Problem> searchProblems(Connection connection, boolean queryEanbled, String query, String flagSql) throws SQLException {
+        String sql;
+        if(queryEanbled) {
+            sql = "SELECT * FROM problems WHERE (content LIKE '%' || ? || '%' OR problem_name LIKE '%' || ? || '%') AND "+flagSql+";";
+        }
+        else {
+            sql = "SELECT * FROM problems WHERE "+flagSql+";";
+        }
+        log.info("search query: "+sql);
+
+        try {
+            PreparedStatement psmt = connection.prepareStatement(sql);
+
+            if(queryEanbled) {
+                psmt.setString(1, query);
+                psmt.setString(2, query);
+            }
+
+            ResultSet rs = psmt.executeQuery();
+
+            List<Problem> searched = new Vector<>();
+            while (rs.next()) {
+                Problem problem = new Problem();
+                problem.setCode(rs.getInt("problem_code"));
+                problem.setName(rs.getString("problem_name"));
+                problem.setTag(rs.getInt("tags"));
+                problem.setDifficulty(rs.getInt("difficulty"));
+                problem.setBranch(rs.getInt("branch"));
+                problem.setStatus(rs.getInt("status"));
+                searched.add(problem);
+            }
+
+            return searched;
+        } catch (SQLException e) {
+            log.error("SQLException: failed to search problem. query="+sql+". text="+query, e);
             throw e;
         }
     }

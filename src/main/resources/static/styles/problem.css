@@ -59,6 +59,11 @@ div.problem-color {
     background: linear-gradient(270deg, red, transparent);
     border-radius: 0 20px 20px 0;
 }
+span.problem-list-label {
+    color: var(--text-gray);
+    font-weight: 600;
+    font-style: italic;
+}
 
 /* Problem solve */
 div.info {

@@ -2,7 +2,7 @@
 
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>LiLA - 문제 목록</title>
+        <title>LiLA - 문제 검색</title>
         <th:block th:replace="fragments/header.html :: header"/>
         <link rel="stylesheet" href="/static/styles/problem.css">
     </head>
@@ -23,12 +23,13 @@
                         <button type="submit" class="button">검색</button>
                     </div>
                 </div>
-                <div class="problem-grid">
-                    <a class="problem transition" href="/problems/solve/1">
-                        <p class="problem-no">0001번</p>
+                <div class="problem-grid" th:each="problem: ${problems}">
+                    <a class="problem transition" th:href="${'/problems/solve/'+problem.getCode()}">
+                        <p class="problem-no" th:text="${problem.getCode()+'번'}"></p>
                         <div class="problem-tags">
-                            <span class="problem-list-label">SILVER</span>
-                            <span class="problem-list-label">대수</span>
+                            <span class="problem-list-label" th:text="${problem.getDifficulty()}"></span>
+                            <span class="problem-list-label" th:text="${problem.getBranch()}"></span>
+
                         </div>
                         <div class="problem-color"></div>
                     </a>
