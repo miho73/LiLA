@@ -18,11 +18,44 @@ public class SessionService {
         session.setAttribute("pri", privilege);
     }
 
+    /**
+     * check if account is logged in
+     * @param session session to test
+     * @return true when session is logged in
+     */
     public boolean checkLogin(HttpSession session) {
         if(session == null) return false;
         Object logged = session.getAttribute("log");
         if(logged == null) return false;
         return (boolean)logged;
+    }
+
+    public enum PRIVILEGE {
+        USER,
+        PROBLEM_EDITOR,
+        ISSUE_TRACKER,
+        ROOT
+    }
+    /**
+     * check if session has ONE OF given privilege
+     * @param session session to test
+     * @return true if session has sufficient privilege
+     */
+    public boolean checkPrivilege(HttpSession session, PRIVILEGE... privilege) {
+        if(!checkLogin(session)) return false;
+
+        String hasPrivilege = getPrivilege(session);
+
+        if(hasPrivilege.contains("r")) return true;
+
+        for(PRIVILEGE priv : privilege) {
+            switch (priv) {
+                case USER           -> { if(hasPrivilege.contains("u")) return true; }
+                case PROBLEM_EDITOR -> { if(hasPrivilege.contains("p")) return true; }
+                case ISSUE_TRACKER  -> { if(hasPrivilege.contains("i")) return true; }
+            }
+        }
+        return false;
     }
 
     public String getId(HttpSession session) {

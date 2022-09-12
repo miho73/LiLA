@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
@@ -42,8 +43,13 @@ public class ProblemController {
 
 
     @GetMapping("/create")
-    public String createProblem(Model model, HttpSession session) {
+    public String createProblem(Model model, HttpSession session, HttpServletResponse response) throws IOException {
         sessionService.loadIdentity(model, session);
+
+        if(!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
+            response.sendError(403);
+        }
+
         model.addAttribute("newProblem", true);
         return "problem/problemSettings";
     }
@@ -53,8 +59,14 @@ public class ProblemController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseBody
-    public String createProblemPost(HttpServletResponse response, @RequestBody Map<String, Object> requestBody) {
+    public String createProblemPost(HttpSession session, HttpServletResponse response,
+                                    @RequestBody Map<String, Object> requestBody) {
+
         try {
+            if(!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
+                response.sendError(403);
+            }
+
             Problem problem = new Problem();
             problem.setName(requestBody.get("problem_name").toString());
             problem.setTag((int)requestBody.get("tags"));
@@ -106,7 +118,13 @@ public class ProblemController {
     @GetMapping("/update/{problem_code}")
     public String updateProblem(Model model, HttpSession session, HttpServletResponse response,
                                 @PathVariable("problem_code") int problem_code) throws Exception {
+
         sessionService.loadIdentity(model, session);
+
+        if(!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
+            response.sendError(403);
+        }
+
         model.addAttribute("newProblem", false);
         model.addAttribute("problemCode", problem_code);
         return "problem/problemSettings";
@@ -117,10 +135,15 @@ public class ProblemController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseBody
-    public String updateProblemPost(HttpServletResponse response,
+    public String updateProblemPost(HttpServletResponse response, HttpSession session,
                                     @PathVariable("problem_code") int problem_code,
                                     @RequestBody Map<String, Object> requestBody) {
+
         try {
+            if(!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
+                response.sendError(403);
+            }
+
             Problem problem = new Problem();
             problem.setName(requestBody.get("problem_name").toString());
             problem.setTag((int)requestBody.get("tags"));
@@ -228,23 +251,30 @@ public class ProblemController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
-    public String compileLilac(HttpServletResponse response, @RequestBody Map<String,String> requestBody) {
+    public String compileLilac(HttpSession session, HttpServletResponse response,
+                               @RequestBody Map<String,String> requestBody) {
+
         try {
+            if(!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
+                response.sendError(403);
+            }
+
             if(requestBody.get("lilac") == null) {
                 response.setStatus(400);
                 return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Given LiLAC code is null");
             }
             String html = LiLACRenderer.render(requestBody.get("lilac"));
             return RestfulResponse.responseResult(HttpStatus.OK, html);
-        } catch (LiLACParsingException e) {
+        } catch (LiLACParsingException | IOException e) {
             response.setStatus(500);
             return RestfulResponse.responseMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
-
+    /*
     @GetMapping("lilac/preview")
     public String previewLilac() {
         return "problem/lilacPreview";
     }
+    */
 }
