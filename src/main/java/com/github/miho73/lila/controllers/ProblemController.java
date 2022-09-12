@@ -3,15 +3,12 @@ package com.github.miho73.lila.controllers;
 import com.github.miho73.lila.objects.Exception.LiLACParsingException;
 import com.github.miho73.lila.objects.Problem;
 import com.github.miho73.lila.services.ProblemService;
-import com.github.miho73.lila.utils.LiLACRenderer;
 import com.github.miho73.lila.services.SessionService;
+import com.github.miho73.lila.utils.LiLACRenderer;
 import com.github.miho73.lila.utils.RestfulResponse;
 import com.github.miho73.lila.utils.Verifiers;
-import org.json.HTTP;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
-import org.postgresql.util.PSQLException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,19 +16,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
 
+@Slf4j
 @Controller("ProblemController")
 @RequestMapping("/problems")
 public class ProblemController {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     SessionService sessionService;
@@ -74,7 +68,7 @@ public class ProblemController {
 
             // Verify parameters
             if(!Verifiers.inRange(problem.getName().length(), 50, 1)) {
-                logger.warn("Cannot create problem: problem name length out of bound");
+                log.warn("failed to create problem: problem name length out of bound");
                 response.setStatus(400);
                 return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Problem name has illegal length");
             }
@@ -82,26 +76,26 @@ public class ProblemController {
 
             problemService.createProblem(problem);
         } catch (NullPointerException e) {
-            logger.error("Cannot create problem", e);
+            log.error("failed to create problem", e);
             response.setStatus(400);
             return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Missing parameter(s)");
         } catch (ClassCastException e) {
-            logger.warn("Cannot create problem", e);
+            log.warn("failed to create problem", e);
             response.setStatus(400);
             return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Unexpected parameter type");
         } catch (IllegalStateException e) {
-            logger.warn("Cannot create problem", e);
+            log.warn("failed to create problem", e);
             response.setStatus(400);
             return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Illegal state for branch and/or difficulty");
         } catch (SQLException e) {
-            logger.error("Cannot create problem", e);
+            log.error("failed to create problem", e);
             response.setStatus(500);
             return RestfulResponse.responseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
         } catch (LiLACParsingException e) {
             response.setStatus(400);
             return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "LiLAC cannot be compiled: "+e.getMessage());
         } catch (Exception e) {
-            logger.error("Cannot create problem", e);
+            log.error("failed to create problem", e);
             response.setStatus(500);
             return RestfulResponse.responseResult(HttpStatus.INTERNAL_SERVER_ERROR, "Unknown error");
         }
@@ -141,7 +135,7 @@ public class ProblemController {
 
             // Verify parameters
             if(!Verifiers.inRange(problem.getName().length(), 50, 1)) {
-                logger.warn("Cannot update problem code "+problem_code+": problem name length out of bound");
+                log.warn("failed to update problem code "+problem_code+": problem name length out of bound");
                 response.setStatus(400);
                 return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Problem name has illegal length");
             }
@@ -149,26 +143,26 @@ public class ProblemController {
 
             problemService.updateProblem(problem_code, problem);
         } catch (NullPointerException e) {
-            logger.error("Cannot update problem", e);
+            log.error("failed to update problem", e);
             response.setStatus(400);
             return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Missing parameter(s)");
         } catch (ClassCastException e) {
-            logger.warn("Cannot update problem", e);
+            log.warn("failed to update problem", e);
             response.setStatus(400);
             return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Unexpected parameter type");
         } catch (IllegalStateException e) {
-            logger.warn("Cannot update problem", e);
+            log.warn("failed to update problem", e);
             response.setStatus(400);
             return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Illegal state for branch and/or difficulty");
         } catch (SQLException e) {
-            logger.error("Cannot update problem", e);
+            log.error("failed to update problem", e);
             response.setStatus(500);
             return RestfulResponse.responseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
         } catch (LiLACParsingException e) {
             response.setStatus(400);
             return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "LiLAC cannot be compiled: "+e.getMessage());
         } catch (Exception e) {
-            logger.error("Cannot update problem", e);
+            log.error("failed to update problem", e);
             response.setStatus(500);
             return RestfulResponse.responseResult(HttpStatus.INTERNAL_SERVER_ERROR, "Unknown error");
         }

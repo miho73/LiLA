@@ -12,9 +12,14 @@ import java.sql.SQLException;
 public class Database {
     private DriverManagerDataSource dataSource;
 
-    @Value("${lila.database.connection.url}") private String DB_URL;
-    @Value("${lila.database.connection.name}") private String DB_USERNAME;
-    @Value("${lila.database.connection.password}") private String DB_PASSWORD;
+    @Value("${lila.database.connection.url}")
+    private String DB_URL;
+
+    @Value("${lila.database.connection.name}")
+    private String DB_USERNAME;
+
+    @Value("${lila.database.connection.password}")
+    private String DB_PASSWORD;
 
     public Connection openConnection() throws SQLException {
         return dataSource.getConnection();

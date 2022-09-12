@@ -1,34 +1,30 @@
 package com.github.miho73.lila.controllers;
 
-import com.github.miho73.lila.services.AuthService;
 import com.github.miho73.lila.services.SessionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.*;
-import java.nio.Buffer;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
+@Slf4j
 @Controller("MainController")
 public class MainController {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private String sitemap, robots;
 
-    @Autowired SessionService sessionService;
+    @Autowired
+    SessionService sessionService;
 
     @PostConstruct
     public void initCommonControl() {
@@ -41,7 +37,7 @@ public class MainController {
             this.robots = readBufferedReader(robotStream);
             this.sitemap = readBufferedReader(sitemapStream);
         } catch (IOException | RuntimeException e) {
-            logger.error("Cannot read file.", e);
+            log.error("failed to read file.", e);
             throw new RuntimeException(e);
         }
     }

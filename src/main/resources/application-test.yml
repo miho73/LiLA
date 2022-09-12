@@ -40,18 +40,19 @@ spring:
     password: ENC(IH298hYdpuNtbN8EHwTsfo0nzgM0PD6pfoeWds0bMSg8NnLA5gZnzfdm0Qj8vz9HZ/s+x7yaYEriuRdcravQZQ==)
 
 lila:
-  oidc:
+  oauth:
     google:
       client-id: 353178292557-u0lifp4uncdo656tfeb1pl557l0t9rip.apps.googleusercontent.com
       client-secret: ENC(wiykEt2Hfx6I2ZtQBw1eW/pILpnUqqlFdmQVsB3EY2qtgQWFbVzci1qrglMn/ae37gGyoZSlDKUKBLmGr7QLHXs23Jt8PQAyn399+rajRvM=)
-      redirect-uri: http://localhost:15342/auth/oidc/callback/google
-      auth-request-uri: https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&response_type=code&access_type=offline&prompt=consent&scope=openid email profile&redirect_uri=%s&state=%s
+      redirect-uri: http://localhost:15342/auth/oauth/callback/google
+      auth-request-uri: https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&response_type=code&access_type=offline&prompt=consent&scope=email profile&redirect_uri=%s&state=%s
       access-token-uri: https://oauth2.googleapis.com/token
       certs-uri: https://www.googleapis.com/oauth2/v3/certs
+      user-data-uri: https://www.googleapis.com/oauth2/v2/userinfo
     kakao:
       client-id: 5044ae1468b1f3bbddb94fa1819d409d
       client-secret: ENC(tQ15VHUT1Op8NMhE50smuE1AKeJsx7nOJGU7hRipV0sAIyCW9HSO2xvIK1n0on9KYhmENvzHC0Omj3sO3WXmAVaLT29KnNsNX90TB0vuhRE=)
-      redirect:uri: http://localhost:15342/auth/oidc/callback/kakao
+      redirect-uri: http://localhost:15342/auth/oauth/callback/kakao
       auth-request-uri: https://kauth.kakao.com/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code&state=%s&prompt=login
       access-token-uri: https://kauth.kakao.com/oauth/token
       user-data-uri: https://kapi.kakao.com/v2/user/me

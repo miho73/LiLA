@@ -1,18 +1,15 @@
 package com.github.miho73.lila.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
+@Slf4j
 @Service("SessionService")
 public class SessionService {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
 
     public void initLoginSession(HttpSession session, String uid, String uname, String privilege) {
         session.setAttribute("log", true);
@@ -42,7 +39,7 @@ public class SessionService {
     }
 
     public void invalidSession(HttpSession session) {
-        logger.info("Session invalidated. ID="+getId(session));
+        log.info("Session invalidated. ID="+getId(session));
         session.invalidate();
     }
 

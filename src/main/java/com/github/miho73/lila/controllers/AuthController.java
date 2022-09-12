@@ -2,117 +2,110 @@ package com.github.miho73.lila.controllers;
 
 import com.github.miho73.lila.objects.User;
 import com.github.miho73.lila.services.AuthService;
-import com.github.miho73.lila.services.JWTService;
 import com.github.miho73.lila.services.SessionService;
-import com.github.miho73.lila.services.oidc.GoogleOIDCService;
-import com.github.miho73.lila.services.oidc.KakaoOIDCService;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.miho73.lila.services.oauth.GoogleOAuthService;
+import com.github.miho73.lila.services.oauth.KakaoOAuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.net.http.HttpResponse;
 
+@Slf4j
 @Controller("AuthController")
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    SessionService sessionService;
 
-    @Autowired GoogleOIDCService googleOIDCService;
-    @Autowired KakaoOIDCService kakaoOIDCService;
-    @Autowired JWTService jwtService;
-    @Autowired SessionService sessionService;
-    @Autowired AuthService authService;
+    @Autowired
+    KakaoOAuthService kakaoOAuthService;
+    @Autowired
+    GoogleOAuthService googleOAuthService;
+
+    @Autowired
+    AuthService authService;
 
     @GetMapping("")
     public String login(Model model, HttpSession session) {
         sessionService.loadIdentity(model, session);
         return "auth/login";
     }
+
     @GetMapping("signout")
-    public String signOut(HttpSession session) {
+    public void signOut(HttpSession session, HttpServletResponse response) throws IOException {
         sessionService.invalidSession(session);
-        return "redirect:/";
+        response.sendRedirect("/");
     }
 
-    @GetMapping("oidc/google")
-    public String googleOIDC(HttpSession session) {
-        String state = googleOIDCService.createStateCode();
-        session.setAttribute("google_auth_state", state);
-        return "redirect:"+googleOIDCService.getAuthUri(state);
-    }
-    @GetMapping("oidc/callback/google")
-    public void googleOIDCCallback(HttpSession session, HttpServletResponse response, HttpServletRequest request,
-                                   @RequestParam("code") String code,
-                                   @RequestParam("state") String state) throws Exception {
-        // Check state
-        if(session.getAttribute("google_auth_state") == null) {
-            response.sendError(401);
-            return;
-        }
-        String stateSession = session.getAttribute("google_auth_state").toString();
-        session.removeAttribute("google_auth_state");
-
-        if(state.equals(stateSession)) {
-            authService.proceedAuth(User.AUTH_SOURCES.GOOGLE, code, response, session);
-            response.sendRedirect("/");
-        }
-        else {
-            response.sendError(401);
-        }
-    }
-
-    @GetMapping("oidc/kakao")
-    public String kakaoOIDC(HttpSession session) {
-        String state = kakaoOIDCService.createStateCode();
+    @GetMapping("oauth/kakao")
+    public void kakaoLogin(HttpSession session, HttpServletResponse response) throws IOException {
+        String state = kakaoOAuthService.createStateCode();
         session.setAttribute("kakao_auth_state", state);
-        return "redirect:"+kakaoOIDCService.getAuthUri(state);
+        response.sendRedirect(kakaoOAuthService.getAuthUri(state));
     }
-    @GetMapping("oidc/callback/kakao")
-    public void kakaoOIDCCallback(HttpSession session, HttpServletResponse response, HttpServletRequest request,
-                                   @RequestParam("code") String code,
-                                   @RequestParam("state") String state) throws Exception {
-        // Check state
-        if(session.getAttribute("kakao_auth_state") == null) {
-            response.sendError(401);
+    @GetMapping("oauth/google")
+    public void googleLogin(HttpSession session, HttpServletResponse response) throws IOException {
+        String state = googleOAuthService.createStateCode();
+        session.setAttribute("google_auth_state", state);
+        response.sendRedirect(googleOAuthService.getAuthUri(state));
+    }
+
+    @GetMapping("oauth/callback/kakao")
+    public void kakaoOAuth(HttpSession session, HttpServletResponse response,
+                           @RequestParam("code") String code,
+                           @RequestParam("state") String state,
+                           @RequestParam(value = "error", required = false, defaultValue = "") String error,
+                           @RequestParam(value = "error_description", required = false, defaultValue = "") String errorMsg) throws IOException {
+        if(!error.equals("")) {
+            log.warn("kakao login canceled: "+error+". "+errorMsg);
             return;
         }
-        String stateSession = session.getAttribute("kakao_auth_state").toString();
-        session.removeAttribute("kakao_auth_state");
 
-        if(state.equals(stateSession)) {
-            authService.proceedAuth(User.AUTH_SOURCES.KAKAO, code, response, session);
-            response.sendRedirect("/");
-        }
-        else {
-            response.sendError(401);
+        int result = authService.proceedKakaoAuth(code, state, session);
+        switch (result) {
+            case 0 -> {
+                response.sendRedirect("/");
+            }
+            case 1 -> {
+                response.sendError(401);
+            }
+            case 2, 3, 4, 5 -> {
+                response.sendError(500);
+            }
         }
     }
+    @GetMapping("oauth/callback/google")
+    public void googleOAuth(HttpSession session, HttpServletResponse response,
+                            @RequestParam("code") String code,
+                            @RequestParam("state") String state,
+                            @RequestParam(value = "error", required = false, defaultValue = "") String error) throws Exception {
+        if(!error.equals("")) {
+            log.warn("google login canceled: "+error+". "+error);
+            return;
+        }
 
-    @GetMapping("/verify")
-    @ResponseBody
-    public String verifyJwtToken(@CookieValue(value = "lila-access", required = false, defaultValue = "") String jwt) {
-        if(jwtService.verifyGoogleToken(jwt)) {
-            return "your token is valid!\n\n";
-        }
-        else {
-            return "your token is invalid!\n\n";
-        }
-    }
-    @GetMapping("/authorize")
-    @ResponseBody
-    public String authorize(HttpSession session) {
-        if(sessionService.checkLogin(session)) {
-            return "your session is logged in!\n\n";
-        }
-        else {
-            return "your session is not logged in!\n\n";
+        int result = authService.proceedGoogleAuth(code, state, session);
+        switch (result) {
+            case 0 -> {
+                response.sendRedirect("/");
+            }
+            case 1 -> {
+                response.sendError(401);
+            }
+            case 2, 3, 4, 5 -> {
+                response.sendError(500);
+            }
         }
     }
 }

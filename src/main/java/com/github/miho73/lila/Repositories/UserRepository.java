@@ -1,17 +1,14 @@
 package com.github.miho73.lila.Repositories;
 
 import com.github.miho73.lila.objects.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 
+@Slf4j
 @Repository
 public class UserRepository extends Database {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public void addUser(User user, Connection con) throws SQLException {
         try {
@@ -28,36 +25,43 @@ public class UserRepository extends Database {
             psmt.setTimestamp(6, timestamp);
 
             psmt.execute();
-            logger.info("User added. user_id="+user.getUserId());
+            log.info("User added. user_id="+user.getUserId());
         } catch (SQLException e) {
-            logger.error("SQLException: Cannot add user to database.", e);
+            log.error("SQLException: failed to add user to database.", e);
             throw e;
         }
     }
 
-    public boolean queryUserExistence(String user_id, Connection connection) throws SQLException {
+    /**
+     * check if user with given id exists in database
+     * @param userId user id to check
+     * @param connection connection to database
+     * @return true when exists
+     * @throws SQLException Database error
+     */
+    public boolean queryUserExistence(String userId, Connection connection) throws SQLException {
         try {
             String sql = "SELECT COUNT(*) AS cnt FROM users WHERE user_id=?;";
             PreparedStatement psmt = connection.prepareStatement(sql);
 
-            psmt.setString(1, user_id);
+            psmt.setString(1, userId);
 
             ResultSet rs = psmt.executeQuery();
             if(!rs.next()) {
                 throw new SQLException("No row was returned from query.");
             }
             if(rs.getInt("cnt") >= 2) {
-                logger.warn("Duplicated user_id detected. user_id="+user_id);
+                log.warn("Duplicated user_id detected. user_id="+userId);
                 return false;
             }
             return rs.getInt("cnt") == 1;
         } catch (SQLException e) {
-            logger.error("SQLException: Cannot query user existence.", e);
+            log.error("SQLException: failed to query user existence.", e);
             throw e;
         }
     }
 
-    public void updateUserLoginTime(String user_id, Connection connection) throws SQLException {
+    public void updateUserLoginTime(String userId, Connection connection) throws SQLException {
         try {
             String sql = "UPDATE users SET last_login=? WHERE user_id=?;";
             PreparedStatement psmt = connection.prepareStatement(sql);
@@ -65,23 +69,23 @@ public class UserRepository extends Database {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
             psmt.setTimestamp(1, timestamp);
-            psmt.setString(2, user_id);
+            psmt.setString(2, userId);
 
             psmt.execute();
         } catch (SQLException e) {
-            logger.error("SQLException: Cannot update user login time.", e);
+            log.error("SQLException: failed to update user login time.", e);
             throw e;
         }
     }
 
-    public User queryUser(String uid, Connection connection) throws SQLException {
+    public User queryUser(String userId, Connection connection) throws SQLException {
         try {
             String sql = "SELECT * FROM users WHERE user_id=?;";
             PreparedStatement psmt = connection.prepareStatement(sql);
 
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-            psmt.setString(1, uid);
+            psmt.setString(1, userId);
             ResultSet rs = psmt.executeQuery();
 
             if(!rs.next()) {
@@ -103,7 +107,7 @@ public class UserRepository extends Database {
             }
             return user;
         } catch (SQLException e) {
-            logger.error("SQLException: Cannot query user.", e);
+            log.error("SQLException: failed to query user.", e);
             throw e;
         }
     }

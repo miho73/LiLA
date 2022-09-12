@@ -1,17 +1,14 @@
 package com.github.miho73.lila.Repositories;
 
 import com.github.miho73.lila.objects.Problem;
-import com.github.miho73.lila.objects.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 
+@Slf4j
 @Repository
 public class ProblemRepository extends Database {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public void addProblem(Problem problem, Connection connection) throws SQLException {
         try {
@@ -34,7 +31,7 @@ public class ProblemRepository extends Database {
 
             psmt.execute();
         } catch (SQLException e) {
-            logger.error("SQLException: Cannot add problem to database.", e);
+            log.error("SQLException: failed to add problem to database.", e);
             throw e;
         }
     }
@@ -56,7 +53,7 @@ public class ProblemRepository extends Database {
 
         ResultSet rs = psmt.executeQuery();
         if(!rs.next()) {
-            logger.warn("problem with code "+problemCode+" was not found.");
+            log.warn("problem with code "+problemCode+" was not found.");
             return null;
         }
 
@@ -98,7 +95,7 @@ public class ProblemRepository extends Database {
 
             psmt.execute();
         } catch (SQLException e) {
-            logger.error("SQLException: Cannot update problem to database.", e);
+            log.error("SQLException: failed to update problem to database.", e);
             throw e;
         }
     }

@@ -4,8 +4,7 @@ import com.github.miho73.lila.Repositories.ProblemRepository;
 import com.github.miho73.lila.objects.Exception.LiLACParsingException;
 import com.github.miho73.lila.objects.Problem;
 import com.github.miho73.lila.utils.LiLACRenderer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +12,12 @@ import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Slf4j
 @Service("ProblemService")
 public class ProblemService {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired ProblemRepository problemRepository;
+    @Autowired
+    ProblemRepository problemRepository;
 
     public int PROBLEM_COUNT;
 
@@ -28,7 +27,7 @@ public class ProblemService {
         try {
             connection = problemRepository.openConnection();
             PROBLEM_COUNT = problemRepository.getProblemCount(connection);
-            logger.info("Problem count set to "+PROBLEM_COUNT);
+            log.info("Problem count set to "+PROBLEM_COUNT);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -43,13 +42,13 @@ public class ProblemService {
             problemRepository.addProblem(problem, connection);
             problemRepository.commitAndClose(connection);
             PROBLEM_COUNT++;
-            logger.info("Problem "+PROBLEM_COUNT+" created");
+            log.info("Problem "+PROBLEM_COUNT+" created");
         } catch (Exception e) {
             if(connection != null) {
                 problemRepository.rollbackAndClose(connection);
-                logger.error("Failed to create problem. Transaction was rolled back", e);
+                log.error("Failed to create problem. Transaction was rolled back", e);
             }
-            logger.error("Failed to create problem. Transaction was not initiated", e);
+            log.error("Failed to create problem. Transaction was not initiated", e);
             throw e;
         }
     }
@@ -59,7 +58,7 @@ public class ProblemService {
             Connection connection = problemRepository.openConnection();
             return problemRepository.getProblem(connection, problemCode);
         } catch (Exception e) {
-            logger.error("Failed to query problem from database", e);
+            log.error("Failed to query problem from database", e);
             throw e;
         }
     }
@@ -74,13 +73,13 @@ public class ProblemService {
             problemRepository.updateProblem(problem, connection);
             problemRepository.commitAndClose(connection);
             PROBLEM_COUNT++;
-            logger.info("Problem "+problem_code+" updated");
+            log.info("Problem "+problem_code+" updated");
         } catch (Exception e) {
             if(connection != null) {
                 problemRepository.rollbackAndClose(connection);
-                logger.error("Failed to update problem. Transaction was rolled back", e);
+                log.error("Failed to update problem. Transaction was rolled back", e);
             }
-            logger.error("Failed to update problem. Transaction was not initiated", e);
+            log.error("Failed to update problem. Transaction was not initiated", e);
             throw e;
         }
     }
