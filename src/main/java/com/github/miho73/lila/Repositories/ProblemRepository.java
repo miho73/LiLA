@@ -111,7 +111,6 @@ public class ProblemRepository extends Database {
         else {
             sql = "SELECT * FROM problems WHERE "+flagSql+";";
         }
-        log.info("search query: "+sql);
 
         try {
             PreparedStatement psmt = connection.prepareStatement(sql);

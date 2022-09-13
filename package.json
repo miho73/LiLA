@@ -1,0 +1,22 @@
+{
+  "name": "lila",
+  "version": "1.0.0",
+  "description": "LiLA",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miho73/LiLA.git"
+  },
+  "author": "miho73",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/miho73/LiLA/issues"
+  },
+  "homepage": "https://github.com/miho73/LiLA#readme",
+  "dependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.19.0",
+    "@babel/preset-env": "^7.19.0",
+    "@babel/preset-react": "^7.18.6"
+  }
+}

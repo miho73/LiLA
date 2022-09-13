@@ -6,6 +6,7 @@
         <title th:if="${newProblem}">새 문제 만들기</title>
         <title th:unless="${newProblem}" th:text="${problem_code+'번 문제 수정'}"></title>
         <th:block th:replace="fragments/header.html :: header"/>
+        <th:block th:replace="fragments/header.html :: react"/>
         <link rel="stylesheet" href="/static/styles/problem.css">
         <link rel="stylesheet" href="/static/styles/lilac.css">
         <link rel="stylesheet" data-name="vs/editor/editor.main" href="//cdn.lucys.r-e.kr/monaco-editor/min/vs/editor/editor.main.css"/>
@@ -78,6 +79,7 @@
             </div>
             <div class="block">
                 <h3 class="block-header">정답*</h3>
+                <div id="judge-settings"></div>
             </div>
             <div class="block">
                 <h3 class="block-header">태그</h3>
@@ -145,4 +147,5 @@
             notification('문제를 불러오지 못했습니다.', axiosError(error), 2);
         });
     </script>
+    <script src="/static/scripts/react/judgeSettings.js"></script>
 </html>

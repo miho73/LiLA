@@ -334,16 +334,24 @@ fieldset.hidden-field {
     display: none;
 }
 
-input[type='text'],input[type='password'] {
+input[type='text'],input[type='password'],input[type='number'],textarea {
     padding: 5px 10px;
     border: #ddd solid 1px;
     border-radius: 5px;
     outline: none;
     margin: 1px;
 }
-input[type='text']:focus,input[type='password']:focus {
+input[type='text']:focus,input[type='password']:focus,input[type='number']:focus,textarea:focus {
     border: 2px solid var(--lilac);
     margin: 0;
+}
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
 }
 label.checkbox {
     cursor: pointer;
@@ -434,7 +442,7 @@ a.caption {
         margin: 20px auto 0 auto;
     }
 
-    input[type='text'],input[type='password'] {
+    input[type='text'],input[type='password'],input[type='number'],textarea {
         width: 100%;
     }
 
