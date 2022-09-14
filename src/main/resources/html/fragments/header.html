@@ -27,7 +27,36 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </th:block>
     <th:block th:fragment="react">
+        <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+        <!-- TODO: switch to production cdn
         <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
         <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+        -->
+    </th:block>
+    <th:block th:fragment="mathquill">
+        <link rel="stylesheet" href="https://cdn.lucys.r-e.kr/mathquill-0.10.1/mathquill.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="https://cdn.lucys.r-e.kr/mathquill-0.10.1/mathquill.min.js"></script>
+        <script>
+            const MQ = MathQuill.getInterface(2);
+        </script>
+    </th:block>
+    <th:block th:fragment="mathjax">
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    processEscapes: true,
+                    processClass: "mathjax",
+                    ignoreClass: "no-mathjax"
+                },
+                CommonHTML: {
+                    scale: 90
+                }
+            });
+        </script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </th:block>
 </html>

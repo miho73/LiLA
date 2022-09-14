@@ -9,6 +9,7 @@ import com.github.miho73.lila.utils.RestfulResponse;
 import com.github.miho73.lila.utils.Verifiers;
 import io.lettuce.core.dynamic.annotation.Param;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -92,13 +93,16 @@ public class ProblemController {
             problem.setStatus((int)requestBody.get("state"));
             problem.setAnswer(requestBody.get("answer").toString());
 
-
             // Verify parameters
             if(!Verifiers.inRange(problem.getName().length(), 50, 1)) {
                 log.warn("failed to create problem: problem name length out of bound");
                 response.setStatus(400);
                 return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Problem name has illegal length");
             }
+            JSONArray judges = new JSONArray(problem.getAnswer());
+            // TODO: Verify judge json
+            problem.setAnswer(judges.toString());
+
             problem.setName(problem.getName().replace("<", "&lt;").replace(">", "&gt;"));
 
             problemService.createProblem(problem);
@@ -177,6 +181,10 @@ public class ProblemController {
                 response.setStatus(400);
                 return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Problem name has illegal length");
             }
+            JSONArray judges = new JSONArray(problem.getAnswer());
+            // TODO: Verify judge json
+            problem.setAnswer(judges.toString());
+
             problem.setName(problem.getName().replace("<", "&lt;").replace(">", "&gt;"));
 
             problemService.updateProblem(problem_code, problem);
@@ -255,6 +263,7 @@ public class ProblemController {
             resp.put("difficulty", problem.getDifficultyCode());
             resp.put("state", problem.getStatusCode());
             resp.put("tags", problem.getTag());
+            resp.put("answer", problem.getAnswer());
             return RestfulResponse.responseResult(HttpStatus.OK, resp);
         } catch (Exception e) {
             response.setStatus(500);
@@ -285,11 +294,4 @@ public class ProblemController {
             return RestfulResponse.responseMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
-
-    /*
-    @GetMapping("lilac/preview")
-    public String previewLilac() {
-        return "problem/lilacPreview";
-    }
-    */
 }

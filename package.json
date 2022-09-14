@@ -2,7 +2,9 @@
   "name": "lila",
   "version": "1.0.0",
   "description": "LiLA",
-  "scripts": {},
+  "scripts": {
+    "watch": "npx babel src/main/resources/react-jsx -d src/main/resources/static/scripts/react -w"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/miho73/LiLA.git"

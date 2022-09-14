@@ -24,7 +24,7 @@ function preview() {
     }, 100);
 }
 
-var name, difficulty, branch, content, solution, tags, state;
+var name, difficulty, branch, content, solution, tags, state, judge;
 
 function create() {
     if(validate()) {
@@ -37,7 +37,7 @@ function create() {
             solution: this.solution,
             tags: this.tag,
             state: this.state,
-            answer: ''
+            answer: JSON.stringify(judge)
         })
         .then(resp => {
             var pn = resp.data.result;
@@ -63,7 +63,7 @@ function update(problem_code) {
             solution: this.solution,
             tags: this.tag,
             state: this.state,
-            answer: ''
+            answer: JSON.stringify(judge)
         })
         .then(resp => {
             var pn = resp.data.result;
@@ -85,6 +85,7 @@ function validate() {
     this.content = vContent.getValue();
     this.solution = vSolution.getValue();
     this.tag = (gei('o1').checked << 0);
+    this.judge = [];
 
     if(state == 1) {
         this.tag ^= 0b00100000000000000000000000000000;
@@ -101,7 +102,26 @@ function validate() {
     wasError = checkSingle(inRange(this.name.length, 50, 1), 'name')        || wasError;
     wasError = checkSingle(inRange(this.difficulty, 10, 0), 'difficulty')   || wasError;
     wasError = checkSingle(inRange(this.branch, 7, 0), 'branch')            || wasError;
-    wasError = checkSingle(inRange(this.state, 3, 0), 'status')            || wasError;
+    wasError = checkSingle(inRange(this.state, 3, 0), 'status')             || wasError;
+
+    const judgeCount = gei('judge-count').value;
+    var quotaSum = 0;
+    // per element validation
+    for(var i=0; i<judgeCount; i++) {
+        const judge = {
+            n: gei(`jud-name-${i}`).value,
+            m: gei(`jud-type-${i}`).selectedIndex-1,
+            q: Number.parseFloat(gei(`jud-weig-${i}`).value)
+        };
+        wasError = checkSingle(inRange(judge.n.length, 50, 1), `jud-name-${i}`)     || wasError;
+        wasError = checkSingle(inRange(judge.m, 1, 0), `jud-type-${i}`)             || wasError;
+        wasError = checkSingle(Number.isInteger(judge.q), `jud-weig-${i}`)          || wasError;
+        judge['a'] = judge.m == 0 ? '' : answerMathQuill[i].latex();
+        quotaSum += judge.q;
+
+        this.judge.push(judge);
+    }
+    wasError = checkSingle(quotaSum == 100, 'alloc') || wasError;
     
     if(wasError) {
         window.scroll({

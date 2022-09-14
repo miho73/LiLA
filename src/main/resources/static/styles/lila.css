@@ -398,6 +398,19 @@ label.checkbox input[type='checkbox']:checked ~ .checkmark img {
 label {
     font-size: 1.1em;
 }
+span.math-edit {
+    padding: 7px 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    min-width: 100px;
+}
+.mq-focused {
+    -webkit-box-shadow: var(--lilac) 0 0 0 1px !important;
+    -moz-box-shadow: var(--lilac) 0 0 0 1px !important;
+    box-shadow: var(--lilac) 0 0 0 1px !important;
+    border: 1px solid var(--lilac) !important;
+    border-radius: 10px !important;
+}
 select {
     padding: 5px 30px 5px 10px;
     border: #ddd solid 1px;
@@ -426,6 +439,9 @@ a.caption {
 
 *.form-error {
     box-shadow: 0 0 3px 1px var(--error);
+}
+:is(p,span.label).form-error {
+    padding: 3px 7px;
 }
 
 /* ON MOBILE */
