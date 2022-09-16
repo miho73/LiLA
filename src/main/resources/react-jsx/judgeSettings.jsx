@@ -60,6 +60,7 @@ const JudgeElement = ({code, noticeAllocationUpdate}) => {
         <div className="glow vertical-align" style={{width: "100%"}}>
             <div className="space-between" style={{width: "100%"}}>
                 <input id={"jud-name-"+code} type="text" placeholder="채점 이름" title="채점 이름"/>
+                // TODO: implement remove feature
                 <button className="button">삭제</button>
             </div>
             <select id={"jud-type-"+code} title="채점 방법" defaultValue={-1} onChange={updateJudgeType}>

@@ -147,7 +147,7 @@ var JudgeElement = function JudgeElement(_ref3) {
     type: "text",
     placeholder: "\uCC44\uC810 \uC774\uB984",
     title: "\uCC44\uC810 \uC774\uB984"
-  }), /*#__PURE__*/React.createElement("button", {
+  }), "// TODO: implement remove feature", /*#__PURE__*/React.createElement("button", {
     className: "button"
   }, "\uC0AD\uC81C")), /*#__PURE__*/React.createElement("select", {
     id: "jud-type-" + code,

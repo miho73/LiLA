@@ -1,6 +1,7 @@
 package com.github.miho73.lila.controllers;
 
 import com.github.miho73.lila.objects.Exception.LiLACParsingException;
+import com.github.miho73.lila.objects.Judge;
 import com.github.miho73.lila.objects.Problem;
 import com.github.miho73.lila.services.ProblemService;
 import com.github.miho73.lila.services.SessionService;
@@ -25,6 +26,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 @Slf4j
 @Controller("ProblemController")
@@ -231,13 +233,29 @@ public class ProblemController {
         for (int i = 0; i < tags.length; i++)
             if ((tagsBit & 1 << i) != 0)
                 tags[i] = true;
+
+        List<Judge> judges = new Vector<>();
+        JSONArray judgeList = new JSONArray(problem.getAnswer());
+        judgeList.forEach(judge -> {
+            Judge single = new Judge();
+            JSONObject dJudge = (JSONObject) judge;
+
+            single.setQuota(dJudge.getInt("q"));
+            single.setMethod(dJudge.getInt("m"));
+            single.setName(dJudge.getString("n"));
+            single.setAnswer(dJudge.getString("a"));
+
+            judges.add(single);
+        });
+
         model.addAllAttributes(Map.of(
                 "code", problem.getCode(),
                 "name", problem.getName(),
                 "content", problem.getHtmlContent(),
                 "solution", problem.getHtmlSolution(),
                 "active", problem.getStatusCode(),
-                "tags", tags
+                "tags", tags,
+                "answer", judges
         ));
         return "problem/problemPage";
     }

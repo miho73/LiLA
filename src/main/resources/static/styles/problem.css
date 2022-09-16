@@ -85,6 +85,17 @@ p.problem-notice-error {
     color: var(--error);
 }
 
+div.problem-answer-field {
+    margin-top: 50px;
+}
+div.judge-element {
+    width: 40%;
+}
+p.judge-name {
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
 @media (max-width: 800px) {
     div.prob-nav {
         flex-direction: column;
@@ -99,6 +110,9 @@ p.problem-notice-error {
     }
     a.prob-nav-ele {
         font-size: 0.9em;
+    }
+    div.judge-element {
+        width: 100%;
     }
 }
 
