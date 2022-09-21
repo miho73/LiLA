@@ -7,7 +7,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
 
@@ -55,8 +58,8 @@ public class ProblemRepository extends Database {
         psmt.setInt(1, problemCode);
 
         ResultSet rs = psmt.executeQuery();
-        if(!rs.next()) {
-            log.warn("problem with code "+problemCode+" was not found. problem was not queried");
+        if (!rs.next()) {
+            log.warn("problem with code " + problemCode + " was not found. problem was not queried");
             return null;
         }
 
@@ -103,17 +106,16 @@ public class ProblemRepository extends Database {
 
     public List<Problem> searchProblems(Connection connection, boolean queryEanbled, String query, String flagSql) throws SQLException {
         String sql;
-        if(queryEanbled) {
-            sql = "SELECT * FROM problems WHERE (content LIKE '%' || ? || '%' OR problem_name LIKE '%' || ? || '%') AND "+flagSql+";";
-        }
-        else {
-            sql = "SELECT * FROM problems WHERE "+flagSql+";";
+        if (queryEanbled) {
+            sql = "SELECT * FROM problems WHERE (content LIKE '%' || ? || '%' OR problem_name LIKE '%' || ? || '%') AND " + flagSql + ";";
+        } else {
+            sql = "SELECT * FROM problems WHERE " + flagSql + ";";
         }
 
         try {
             PreparedStatement psmt = connection.prepareStatement(sql);
 
-            if(queryEanbled) {
+            if (queryEanbled) {
                 psmt.setString(1, query);
                 psmt.setString(2, query);
             }
@@ -134,7 +136,7 @@ public class ProblemRepository extends Database {
 
             return searched;
         } catch (SQLException e) {
-            log.error("SQLException: failed to search problem. query="+sql+". text="+query, e);
+            log.error("SQLException: failed to search problem. query=" + sql + ". text=" + query, e);
             throw e;
         }
     }
@@ -147,8 +149,8 @@ public class ProblemRepository extends Database {
             psmt.setInt(1, problemCode);
 
             ResultSet rs = psmt.executeQuery();
-            if(!rs.next()) {
-                log.warn("problem with code "+problemCode+" was not found. answer cannot be queried");
+            if (!rs.next()) {
+                log.warn("problem with code " + problemCode + " was not found. answer cannot be queried");
                 return null;
             }
 
@@ -169,7 +171,7 @@ public class ProblemRepository extends Database {
 
             return ret;
         } catch (SQLException e) {
-            log.error("SQLException: failed to query problem answer of "+problemCode);
+            log.error("SQLException: failed to query problem answer of " + problemCode);
             throw e;
         }
     }

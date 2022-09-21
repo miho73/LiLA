@@ -10,6 +10,7 @@ public class JudgeException extends Exception {
      * Causes:
      * 0: Length of user answer is different with database
      * 1: Some judge elements has wrong judge method
+     *
      * @param code cause of error
      */
     public JudgeException(int code) {

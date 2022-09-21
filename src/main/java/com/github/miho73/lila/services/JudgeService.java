@@ -42,18 +42,18 @@ public class JudgeService {
             List<Judge> answer = problemRepository.getAnswers(problemCode, connection);
 
             // 1. answer form check
-            if(answer.size() != userAnswer.length()) {
+            if (answer.size() != userAnswer.length()) {
                 throw new JudgeException(0);
             }
 
             boolean wasFormatError = false;
-            for(int i = 0; i<answer.size(); i++) {
-                if(((JSONObject)userAnswer.get(i)).getInt("m") != answer.get(i).getMethodCode()) {
+            for (int i = 0; i < answer.size(); i++) {
+                if (((JSONObject) userAnswer.get(i)).getInt("m") != answer.get(i).getMethodCode()) {
                     wasFormatError = true;
                     break;
                 }
             }
-            if(wasFormatError) {
+            if (wasFormatError) {
                 throw new JudgeException(1);
             }
 
@@ -63,8 +63,8 @@ public class JudgeService {
             JSONObject judgeResult = new JSONObject();
             JSONArray judgedElements = new JSONArray();
 
-            for(int i = 0; i<answer.size(); i++) {
-                Object userAns = ((JSONObject)userAnswer.get(i)).get("a");
+            for (int i = 0; i < answer.size(); i++) {
+                Object userAns = ((JSONObject) userAnswer.get(i)).get("a");
                 Judge ans = answer.get(i);
 
                 JSONObject element = new JSONObject();
@@ -75,23 +75,21 @@ public class JudgeService {
 
                 switch (ans.getMethod()) {
                     case SELF -> {
-                        if((boolean)userAns) {
+                        if ((boolean) userAns) {
                             score += ans.getQuota();
                             element.put("correct", true);
                             element.put("your-score", ans.getQuota());
-                        }
-                        else {
+                        } else {
                             element.put("correct", false);
                             element.put("your-score", 0);
                         }
                     }
                     case EQUATION -> {
-                        if(ans.getAnswer().equals(userAns)) {
+                        if (ans.getAnswer().equals(userAns)) {
                             score += ans.getQuota();
                             element.put("correct", true);
                             element.put("your-score", ans.getQuota());
-                        }
-                        else {
+                        } else {
                             element.put("correct", false);
                             element.put("your-score", 0);
                         }
@@ -103,14 +101,13 @@ public class JudgeService {
             judgeResult.put("problem_code", problemCode);
             judgeResult.put("judge", judgedElements);
             judgeResult.put("full-score", fullScore);
-            judgeResult.put("your-score", fullScore*score/100);
+            judgeResult.put("your-score", fullScore * score / 100);
 
             judgeRepository.reportJudge(judgeConnection, judgeResult, userAnswer, judgedElements);
 
             judgeRepository.commit(judgeConnection);
             return judgeResult;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Failed to judge submission. Transaction rolled back");
             judgeRepository.rollback(judgeConnection);
             throw e;

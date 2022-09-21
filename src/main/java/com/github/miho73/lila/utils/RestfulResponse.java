@@ -11,12 +11,14 @@ public class RestfulResponse {
         resp.put("result", result);
         return resp.toString();
     }
+
     public static String responseMessage(HttpStatus status, String message) {
         JSONObject resp = new JSONObject();
         resp.put("code", status.value());
         resp.put("message", message);
         return resp.toString();
     }
+
     public static String response(HttpStatus status, String message, Object result) {
         JSONObject resp = new JSONObject();
         resp.put("code", status.value());

@@ -1,49 +1,50 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
-    <th:block th:fragment="header">
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <!--meta-->
-        <meta name="title" content="LiLA">
-        <meta name="description" content="LiLA">
-        <!--OpenGraph-->
-        <meta property="og:type" content="website">
-        <meta property="og:image" content="https://lila.r-e.kr/lib/resources/og_image.png">
-        <meta property="og:url" content="https:/lila.r-e.kr">
-        <meta property="og:site_name" content="LiLA">
-        <meta property="og:locale" content="ko">
-        <meta property="og:title" content="LiLA">
-        <meta property="og:description" content="LiLA">
-        <!--Twitter-->
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="https://lila.r-e.kr/lib/resources/og_image.png">
-        <meta name="twitter:title" content="LiLA">
-        <meta name="twitter:description" content="LiLA">
-        <!--resource loader-->
-        <link rel="stylesheet" href="/static/styles/lila.css">
-        <script src="/static/scripts/lila.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    </th:block>
-    <th:block th:fragment="react">
-        <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-        <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-        <!-- TODO: switch to production cdn
-        <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-        <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-        -->
-    </th:block>
-    <th:block th:fragment="mathquill">
-        <link rel="stylesheet" href="https://cdn.lucys.r-e.kr/mathquill-0.10.1/mathquill.css"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <script src="https://cdn.lucys.r-e.kr/mathquill-0.10.1/mathquill.min.js"></script>
-        <script>
+<th:block th:fragment="header">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--meta-->
+    <meta name="title" content="LiLA">
+    <meta name="description" content="LiLA">
+    <!--OpenGraph-->
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://lila.r-e.kr/lib/resources/og_image.png">
+    <meta property="og:url" content="https:/lila.r-e.kr">
+    <meta property="og:site_name" content="LiLA">
+    <meta property="og:locale" content="ko">
+    <meta property="og:title" content="LiLA">
+    <meta property="og:description" content="LiLA">
+    <!--Twitter-->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://lila.r-e.kr/lib/resources/og_image.png">
+    <meta name="twitter:title" content="LiLA">
+    <meta name="twitter:description" content="LiLA">
+    <!--resource loader-->
+    <link rel="stylesheet" href="/static/styles/lila.css">
+    <script src="/static/scripts/lila.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</th:block>
+<th:block th:fragment="react">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- TODO: switch to production cdn
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    -->
+</th:block>
+<th:block th:fragment="mathquill">
+    <link rel="stylesheet" href="https://cdn.lucys.r-e.kr/mathquill-0.10.1/mathquill.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdn.lucys.r-e.kr/mathquill-0.10.1/mathquill.min.js"></script>
+    <script>
             const MQ = MathQuill.getInterface(2);
-        </script>
-    </th:block>
-    <th:block th:fragment="mathjax">
-        <script type="text/x-mathjax-config">
+
+    </script>
+</th:block>
+<th:block th:fragment="mathjax">
+    <script type="text/x-mathjax-config">
             MathJax.Hub.Config({
                 tex2jax: {
                     inlineMath: [ ['$','$'], ["\\(","\\)"] ],
@@ -55,8 +56,9 @@
                     scale: 90
                 }
             });
-        </script>
-        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    </th:block>
+
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</th:block>
 </html>

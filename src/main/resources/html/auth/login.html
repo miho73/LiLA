@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>LiLA - 로그인 / 가입</title>
-        <th:block th:replace="fragments/header.html :: header"/>
-        <link rel="stylesheet" href="/static/styles/auth.css">
-    </head>
-    <body>
-        <div class="grid-layout">
-            <th:block th:replace="fragments/base.html :: header-hamburger"/>
-            <th:block th:replace="fragments/base.html :: header-nav"/>
-            <section class="all-center">
-                <div class="authbox">
-                    <h1 class="authbox-header">로그인 / 가입</h1>
-                    <p>다음 계정으로 계속하기:</p>
-                    <div class="horizontal-align authbox-content">
-                        <a class="oauth google" href="/auth/oauth/google" title="Google"></a>
-                        <a class="oauth kakao"  href="/auth/oauth/kakao"  title="Kakao"></a>
-                    </div>
-                    <div style="text-align: center;" class="caption">
-                        로그인함으로써 LiLA의 <a class="caption" target="_blank" href="/docs/eula">이용약관</a>과 <a class="caption" target="_blank" href="/docs/privacy">개인정보처리방침</a>에 동의하게 됩니다.
-                    </div>
-                </div>
-            </section>
-            <th:block th:replace="fragments/base.html :: footer"/>
+<head>
+    <title>LiLA - 로그인 / 가입</title>
+    <th:block th:replace="fragments/header.html :: header"/>
+    <link rel="stylesheet" href="/static/styles/auth.css">
+</head>
+<body>
+<div class="grid-layout">
+    <th:block th:replace="fragments/base.html :: header-hamburger"/>
+    <th:block th:replace="fragments/base.html :: header-nav"/>
+    <section class="all-center">
+        <div class="authbox">
+            <h1 class="authbox-header">로그인 / 가입</h1>
+            <p>다음 계정으로 계속하기:</p>
+            <div class="horizontal-align authbox-content">
+                <a class="oauth google" href="/auth/oauth/google" title="Google"></a>
+                <a class="oauth kakao" href="/auth/oauth/kakao" title="Kakao"></a>
+            </div>
+            <div style="text-align: center;" class="caption">
+                로그인함으로써 LiLA의 <a class="caption" target="_blank" href="/docs/eula">이용약관</a>과 <a class="caption"
+                                                                                                target="_blank"
+                                                                                                href="/docs/privacy">개인정보처리방침</a>에
+                동의하게 됩니다.
+            </div>
         </div>
-    </body>
+    </section>
+    <th:block th:replace="fragments/base.html :: footer"/>
+</div>
+</body>
 </html>

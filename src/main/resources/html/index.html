@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 
 <html lang="ko" class="scroll-snap" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>LiLA</title>
-        <th:block th:replace="fragments/header.html :: header"/>
-    </head>
-    <body class="scroll-snap">
-        <th:block th:replace="fragments/base.html :: header-hamburger"/>
+<head>
+    <title>LiLA</title>
+    <th:block th:replace="fragments/header.html :: header"/>
+</head>
+<body class="scroll-snap">
+<th:block th:replace="fragments/base.html :: header-hamburger"/>
+<div>
+    <th:block th:replace="fragments/base.html :: header-nav"/>
+    <section class="index-section all-center first-section">
         <div>
-            <th:block th:replace="fragments/base.html :: header-nav"/>
-            <section class="index-section all-center first-section">
-                <div>
-                    <h1>리라</h1>
-                    <p>문제해결력!</p>
-                </div>
-            </section>
+            <h1>리라</h1>
+            <p>문제해결력!</p>
         </div>
-        <section class="index-section all-center">
-            <div class="horizontal-align section-div">
-                <a class="card transition" href="/problems">
-                    <img src="/static/images/geometry1.webp" class="card-image">
-                    <p class="card-header">문제</p>
-                    <p class="card-caption">흥미로운 문제들을 만나보세요.</p>
-                </a>
-                <a class="card" href="/issues">
-                    <p class="card-header">이슈</p>
-                </a>
-            </div>
-        </section>
-        <section class="index-section all-center">
+    </section>
+</div>
+<section class="index-section all-center">
+    <div class="horizontal-align section-div">
+        <a class="card transition" href="/problems">
+            <img src="/static/images/geometry1.webp" class="card-image">
+            <p class="card-header">문제</p>
+            <p class="card-caption">흥미로운 문제들을 만나보세요.</p>
+        </a>
+        <a class="card" href="/issues">
+            <p class="card-header">이슈</p>
+        </a>
+    </div>
+</section>
+<section class="index-section all-center">
 
-        </section>
-        <th:block th:replace="fragments/base.html :: footer"/>
-    </body>
+</section>
+<th:block th:replace="fragments/base.html :: footer"/>
+</body>
 </html>

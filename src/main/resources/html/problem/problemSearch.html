@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>LiLA - 문제 검색</title>
-        <th:block th:replace="fragments/header.html :: header"/>
-        <link rel="stylesheet" href="/static/styles/problem.css">
-    </head>
-    <body>
-        <div class="grid-layout">
-            <th:block th:replace="fragments/base.html :: header-hamburger"/>
-            <th:block th:replace="fragments/base.html :: header-nav"/>
-            <section class="container">
-                <div class="prob-nav">
-                    <div class="prob-links">
-                        <a class="prob-nav-ele transition" href="/problems" th:classappend="${page} == '0' ? 'prob-ele-selected'">전체</a>
-                        <a class="prob-nav-ele transition" href="/problems/branch" th:classappend="${page} == '1' ? 'prob-ele-selected'">분류</a>
-                        <a class="prob-nav-ele transition" href="/problems/difficulty" th:classappend="${page} == '2' ? 'prob-ele-selected'">난이도</a>
-                        <a class="prob-nav-ele transition">기타</a>
-                    </div>
-                    <div class="prob-search">
-                        <input type="text" spellcheck="false" placeholder="검색">
-                        <button type="submit" class="button">검색</button>
-                    </div>
-                </div>
-                <div class="problem-grid" th:each="problem: ${problems}">
-                    <a class="problem transition" th:href="${'/problems/solve/'+problem.getCode()}">
-                        <p class="problem-no" th:text="${problem.getCode()+'번'}"></p>
-                        <div class="problem-tags">
-                            <span class="problem-list-label" th:text="${problem.getDifficulty()}"></span>
-                            <span class="problem-list-label" th:text="${problem.getBranch()}"></span>
-
-                        </div>
-                        <div class="problem-color"></div>
-                    </a>
-                </div>
-            </section>
-            <th:block th:replace="fragments/base.html :: footer"/>
+<head>
+    <title>LiLA - 문제 검색</title>
+    <th:block th:replace="fragments/header.html :: header"/>
+    <link rel="stylesheet" href="/static/styles/problem.css">
+</head>
+<body>
+<div class="grid-layout">
+    <th:block th:replace="fragments/base.html :: header-hamburger"/>
+    <th:block th:replace="fragments/base.html :: header-nav"/>
+    <section class="container">
+        <div class="prob-nav">
+            <div class="prob-links">
+                <a class="prob-nav-ele transition" href="/problems"
+                   th:classappend="${page} == '0' ? 'prob-ele-selected'">전체</a>
+                <a class="prob-nav-ele transition" href="/problems/branch"
+                   th:classappend="${page} == '1' ? 'prob-ele-selected'">분류</a>
+                <a class="prob-nav-ele transition" href="/problems/difficulty"
+                   th:classappend="${page} == '2' ? 'prob-ele-selected'">난이도</a>
+                <a class="prob-nav-ele transition">기타</a>
+            </div>
+            <div class="prob-search">
+                <input type="text" spellcheck="false" placeholder="검색">
+                <button type="submit" class="button">검색</button>
+            </div>
         </div>
-    </body>
+        <div class="problem-grid" th:each="problem: ${problems}">
+            <a class="problem transition" th:href="${'/problems/solve/'+problem.getCode()}">
+                <p class="problem-no" th:text="${problem.getCode()+'번'}"></p>
+                <div class="problem-tags">
+                    <span class="problem-list-label" th:text="${problem.getDifficulty()}"></span>
+                    <span class="problem-list-label" th:text="${problem.getBranch()}"></span>
+
+                </div>
+                <div class="problem-color"></div>
+            </a>
+        </div>
+    </section>
+    <th:block th:replace="fragments/base.html :: footer"/>
+</div>
+</body>
 </html>

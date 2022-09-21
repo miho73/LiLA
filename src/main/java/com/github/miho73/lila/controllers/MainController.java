@@ -41,12 +41,13 @@ public class MainController {
             throw new RuntimeException(e);
         }
     }
+
     private String readBufferedReader(BufferedReader reader) throws IOException {
         StringBuilder stringBuffer = new StringBuilder();
         String temp;
         while ((temp = reader.readLine()) != null) {
             stringBuffer.append(temp)
-                        .append("\n");
+                    .append("\n");
         }
         return stringBuffer.toString();
     }

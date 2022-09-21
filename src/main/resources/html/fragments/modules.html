@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
-    <th:block th:fragment="math">
-        <script type="text/x-mathjax-config">
+<th:block th:fragment="math">
+    <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
             tex2jax: {
                 inlineMath: [ ['$','$'], ["\\(","\\)"] ],
@@ -11,12 +11,13 @@
                 ignoreClass: "no-mathjax"
             }
         });
-        </script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
-    </th:block>
-    <th:block th:fragment="notification">
-        <div id="notification-root">
 
-        </div>
-    </th:block>
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+</th:block>
+<th:block th:fragment="notification">
+    <div id="notification-root">
+
+    </div>
+</th:block>
 </html>

@@ -50,6 +50,7 @@ public class AuthController {
         session.setAttribute("kakao_auth_state", state);
         response.sendRedirect(kakaoOAuthService.getAuthUri(state));
     }
+
     @GetMapping("oauth/google")
     public void googleLogin(HttpSession session, HttpServletResponse response) throws IOException {
         String state = googleOAuthService.createStateCode();
@@ -63,8 +64,8 @@ public class AuthController {
                            @RequestParam("state") String state,
                            @RequestParam(value = "error", required = false, defaultValue = "") String error,
                            @RequestParam(value = "error_description", required = false, defaultValue = "") String errorMsg) throws IOException {
-        if(!error.equals("")) {
-            log.warn("kakao login canceled: "+error+". "+errorMsg);
+        if (!error.equals("")) {
+            log.warn("kakao login canceled: " + error + ". " + errorMsg);
             return;
         }
 
@@ -75,13 +76,14 @@ public class AuthController {
             case 2, 3, 4, 5 -> response.sendError(500);
         }
     }
+
     @GetMapping("oauth/callback/google")
     public void googleOAuth(HttpSession session, HttpServletResponse response,
                             @RequestParam("code") String code,
                             @RequestParam("state") String state,
                             @RequestParam(value = "error", required = false, defaultValue = "") String error) throws Exception {
-        if(!error.equals("")) {
-            log.warn("google login canceled: "+error+". "+error);
+        if (!error.equals("")) {
+            log.warn("google login canceled: " + error + ". " + error);
             return;
         }
 

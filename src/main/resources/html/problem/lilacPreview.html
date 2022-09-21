@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>LiLAC Preview</title>
-        <th:block th:replace="fragments/header.html :: header"/>
-        <link rel="stylesheet" href="/static/styles/problem.css">
-        <link rel="stylesheet" href="/static/styles/lilac.css">
-    </head>
-    <body style="padding: 30px">
-        <textarea id="ta" style="width:700px;height:500px;">
+<head>
+    <title>LiLAC Preview</title>
+    <th:block th:replace="fragments/header.html :: header"/>
+    <link rel="stylesheet" href="/static/styles/problem.css">
+    <link rel="stylesheet" href="/static/styles/lilac.css">
+</head>
+<body style="padding: 30px">
+<textarea id="ta" style="width:700px;height:500px;">
 == 텍스트 데코레이션 ==
 Plain
 *Italic*
@@ -923,12 +923,12 @@ fold(Open/Close)
 미재라! 길동의 행어사여! 쾌달한 장부로다. 비록 천생이나 적원을 풀어 버리고, 효우를 완전히 하여 신수를 쾌달하니 만고에 희한한 일이기로 후인이 알게한 바이러라.
 /fold
         </textarea>
-        <br>
-        <button onclick="reload()">reload</button>
-        <hr>
-        <div id="preview" style="border: 1px solid #888; padding: 20px;"></div>
-    </body>
-    <script>
+<br>
+<button onclick="reload()">reload</button>
+<hr>
+<div id="preview" style="border: 1px solid #888; padding: 20px;"></div>
+</body>
+<script>
         function reload() {
             axios.post('/problems/lilac/compile', {
                 lilac: getValue('ta')
@@ -939,5 +939,6 @@ fold(Open/Close)
             });
         }
         reload();
-    </script>
+
+</script>
 </html>

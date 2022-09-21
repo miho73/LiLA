@@ -24,25 +24,31 @@ public class Database {
     public Connection openConnection() throws SQLException {
         return dataSource.getConnection();
     }
+
     public Connection openConnectionForEdit() throws SQLException {
         Connection connection = dataSource.getConnection();
         connection.setAutoCommit(false);
         return connection;
     }
+
     public void commit(Connection connection) throws SQLException {
         connection.commit();
     }
+
     public void commitAndClose(Connection connection) throws SQLException {
         connection.commit();
         connection.close();
     }
+
     public void rollback(Connection connection) throws SQLException {
         connection.rollback();
     }
+
     public void rollbackAndClose(Connection connection) throws SQLException {
         connection.rollback();
         connection.close();
     }
+
     public void close(Connection connection) throws SQLException {
         connection.close();
     }

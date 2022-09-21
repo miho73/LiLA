@@ -3,6 +3,7 @@ package com.github.miho73.lila.utils;
 public class Verifiers {
     /**
      * Check if value is in bound [upper, lower]
+     *
      * @param value value to check
      * @param upper upper bound
      * @param lower lower bound

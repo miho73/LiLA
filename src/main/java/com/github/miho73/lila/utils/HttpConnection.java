@@ -39,12 +39,15 @@ public class HttpConnection {
     public String httpPostRequest(String uri, Map<String, String> requestParams) throws Exception {
         return this.httpRequest(uri, requestParams, HttpMethod.POST);
     }
+
     public String httpGetRequest(String uri, Map<String, String> requestParams) throws Exception {
         return this.httpRequest(uri, requestParams, HttpMethod.GET);
     }
+
     public String httpPostRequest(String uri, MultiValueMap<String, String> requestParams, MultiValueMap<String, String> header) throws Exception {
         return this.httpRequest(uri, requestParams, header, HttpMethod.POST);
     }
+
     public String httpGetRequest(String uri, MultiValueMap<String, String> requestParams, MultiValueMap<String, String> header) throws Exception {
         return this.httpRequest(uri, requestParams, header, HttpMethod.GET);
     }
@@ -52,7 +55,7 @@ public class HttpConnection {
     private String httpRequest(String uri, Map<String, String> requestParams, HttpMethod method) {
         HttpHeaders headers = new HttpHeaders();
 
-        HttpEntity<Map<String, String >> requestEntity = new HttpEntity<>(requestParams, headers);
+        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestParams, headers);
 
         try {
             ResponseEntity<String> response = restTemplate.exchange(uri, method, requestEntity, String.class);
@@ -62,6 +65,7 @@ public class HttpConnection {
             throw e;
         }
     }
+
     private String httpRequest(String uri, MultiValueMap<String, String> requestParams, MultiValueMap<String, String> header, HttpMethod method) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/x-www-form-urlencoded");

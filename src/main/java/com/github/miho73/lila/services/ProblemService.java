@@ -28,7 +28,7 @@ public class ProblemService {
         try {
             connection = problemRepository.openConnection();
             PROBLEM_COUNT = problemRepository.getProblemCount(connection);
-            log.info("Problem count set to "+PROBLEM_COUNT);
+            log.info("Problem count set to " + PROBLEM_COUNT);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -43,9 +43,9 @@ public class ProblemService {
             problemRepository.addProblem(problem, connection);
             problemRepository.commitAndClose(connection);
             PROBLEM_COUNT++;
-            log.info("Problem "+PROBLEM_COUNT+" created");
+            log.info("Problem " + PROBLEM_COUNT + " created");
         } catch (Exception e) {
-            if(connection != null) {
+            if (connection != null) {
                 problemRepository.rollbackAndClose(connection);
                 log.error("Failed to create problem. Transaction was rolled back", e);
             }
@@ -74,9 +74,9 @@ public class ProblemService {
             problemRepository.updateProblem(problem, connection);
             problemRepository.commitAndClose(connection);
             PROBLEM_COUNT++;
-            log.info("Problem "+problem_code+" updated");
+            log.info("Problem " + problem_code + " updated");
         } catch (Exception e) {
-            if(connection != null) {
+            if (connection != null) {
                 problemRepository.rollbackAndClose(connection);
                 log.error("Failed to update problem. Transaction was rolled back", e);
             }

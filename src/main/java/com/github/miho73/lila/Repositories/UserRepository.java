@@ -25,7 +25,7 @@ public class UserRepository extends Database {
             psmt.setTimestamp(6, timestamp);
 
             psmt.execute();
-            log.info("User added. user_id="+user.getUserId());
+            log.info("User added. user_id=" + user.getUserId());
         } catch (SQLException e) {
             log.error("SQLException: failed to add user to database.", e);
             throw e;
@@ -34,7 +34,8 @@ public class UserRepository extends Database {
 
     /**
      * check if user with given id exists in database
-     * @param userId user id to check
+     *
+     * @param userId     user id to check
      * @param connection connection to database
      * @return true when exists
      * @throws SQLException Database error
@@ -47,11 +48,11 @@ public class UserRepository extends Database {
             psmt.setString(1, userId);
 
             ResultSet rs = psmt.executeQuery();
-            if(!rs.next()) {
+            if (!rs.next()) {
                 throw new SQLException("No row was returned from query.");
             }
-            if(rs.getInt("cnt") >= 2) {
-                log.warn("Duplicated user_id detected. user_id="+userId);
+            if (rs.getInt("cnt") >= 2) {
+                log.warn("Duplicated user_id detected. user_id=" + userId);
                 return false;
             }
             return rs.getInt("cnt") == 1;
@@ -88,7 +89,7 @@ public class UserRepository extends Database {
             psmt.setString(1, userId);
             ResultSet rs = psmt.executeQuery();
 
-            if(!rs.next()) {
+            if (!rs.next()) {
                 throw new SQLException("No row was returned from query.");
             }
 

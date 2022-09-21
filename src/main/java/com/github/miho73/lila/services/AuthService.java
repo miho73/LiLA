@@ -29,21 +29,22 @@ public class AuthService {
 
     /**
      * complete authentication via kakao
-     * @param code authorization code
-     * @param state state of request
+     *
+     * @param code    authorization code
+     * @param state   state of request
      * @param session session of user
      * @return 0: success / 1: state error / 2: get token error / 3: get user data error / 4: user creation error / 5: session error
      */
     public int proceedKakaoAuth(String code, String state, HttpSession session) {
         // 1. state check
-        if(session.getAttribute("kakao_auth_state") == null) {
+        if (session.getAttribute("kakao_auth_state") == null) {
             log.warn("state not found. kakao login canceled");
             return 1;
         }
 
         String stateSession = session.getAttribute("kakao_auth_state").toString();
         session.removeAttribute("kakao_auth_state");
-        if(!state.equals(stateSession)) {
+        if (!state.equals(stateSession)) {
             log.warn("invalid state. kakao login canceled");
             return 1;
         }
@@ -70,18 +71,16 @@ public class AuthService {
             newUser.setUserId(userData.getString("id"));
             uid = userData.getString("id");
 
-            if(!userAccount.getBoolean("profile_nickname_needs_agreement")) {
+            if (!userAccount.getBoolean("profile_nickname_needs_agreement")) {
                 newUser.setUserName(
                         userAccount.getJSONObject("profile")
-                                   .getString("nickname")
+                                .getString("nickname")
                 );
-            }
-            else newUser.setUserName("");
+            } else newUser.setUserName("");
 
-            if(!userAccount.getBoolean("email_needs_agreement") && userAccount.getBoolean("has_email")) {
+            if (!userAccount.getBoolean("email_needs_agreement") && userAccount.getBoolean("has_email")) {
                 newUser.setEmail(userAccount.getString("email"));
-            }
-            else newUser.setEmail("");
+            } else newUser.setEmail("");
 
             newUser.setRefreshToken(refreshToken);
         } catch (Exception e) {
@@ -109,21 +108,22 @@ public class AuthService {
 
     /**
      * complete authentication via google
-     * @param code authorization code
-     * @param state state of request
+     *
+     * @param code    authorization code
+     * @param state   state of request
      * @param session session of user
      * @return 0: success / 1: state error / 2: get token error / 3: get user data error / 4: user creation error / 5: session error
      */
     public int proceedGoogleAuth(String code, String state, HttpSession session) throws Exception {
         // 1. state check
-        if(session.getAttribute("google_auth_state") == null) {
+        if (session.getAttribute("google_auth_state") == null) {
             log.warn("state not found. google login canceled");
             return 1;
         }
 
         String stateSession = session.getAttribute("google_auth_state").toString();
         session.removeAttribute("google_auth_state");
-        if(!state.equals(stateSession)) {
+        if (!state.equals(stateSession)) {
             log.warn("invalid state. google login canceled");
             return 1;
         }
@@ -179,12 +179,11 @@ public class AuthService {
      */
     public void proceedUserCreation(User user) throws SQLException {
         Connection connection = userRepository.openConnectionForEdit();
-        if(!userRepository.queryUserExistence(user.getUserId(), connection)) {
+        if (!userRepository.queryUserExistence(user.getUserId(), connection)) {
             try {
                 userRepository.addUser(user, connection);
                 userRepository.commit(connection);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log.error("Failed to add user to database", e);
                 userRepository.rollback(connection);
             }

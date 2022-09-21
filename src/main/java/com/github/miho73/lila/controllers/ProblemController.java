@@ -68,13 +68,14 @@ public class ProblemController {
     public String createProblem(Model model, HttpSession session, HttpServletResponse response) throws IOException {
         sessionService.loadIdentity(model, session);
 
-        if(!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
+        if (!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
             response.sendError(403);
         }
 
         model.addAttribute("newProblem", true);
         return "problem/problemSettings";
     }
+
     @PostMapping(
             value = "/create",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
@@ -85,22 +86,22 @@ public class ProblemController {
                                     @RequestBody Map<String, Object> requestBody) {
 
         try {
-            if(!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
+            if (!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
                 response.sendError(403);
             }
 
             Problem problem = new Problem();
             problem.setName(requestBody.get("problem_name").toString());
-            problem.setTag((int)requestBody.get("tags"));
-            problem.setBranch((int)requestBody.get("branch"));
-            problem.setDifficulty((int)requestBody.get("difficulty"));
+            problem.setTag((int) requestBody.get("tags"));
+            problem.setBranch((int) requestBody.get("branch"));
+            problem.setDifficulty((int) requestBody.get("difficulty"));
             problem.setContent(requestBody.get("content").toString());
             problem.setSolution(requestBody.get("solution").toString());
-            problem.setStatus((int)requestBody.get("state"));
+            problem.setStatus((int) requestBody.get("state"));
             problem.setAnswer(requestBody.get("answer").toString());
 
             // Verify parameters
-            if(!Verifiers.inRange(problem.getName().length(), 50, 1)) {
+            if (!Verifiers.inRange(problem.getName().length(), 50, 1)) {
                 log.warn("failed to create problem: problem name length out of bound");
                 response.setStatus(400);
                 return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Problem name has illegal length");
@@ -130,7 +131,7 @@ public class ProblemController {
             return RestfulResponse.responseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
         } catch (LiLACParsingException e) {
             response.setStatus(400);
-            return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "LiLAC cannot be compiled: "+e.getMessage());
+            return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "LiLAC cannot be compiled: " + e.getMessage());
         } catch (Exception e) {
             log.error("failed to create problem", e);
             response.setStatus(500);
@@ -146,7 +147,7 @@ public class ProblemController {
 
         sessionService.loadIdentity(model, session);
 
-        if(!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
+        if (!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
             response.sendError(403);
         }
 
@@ -154,6 +155,7 @@ public class ProblemController {
         model.addAttribute("problemCode", problem_code);
         return "problem/problemSettings";
     }
+
     @PutMapping(
             value = "/update/{problem_code}",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
@@ -165,25 +167,25 @@ public class ProblemController {
                                     @RequestBody Map<String, Object> requestBody) {
 
         try {
-            if(!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
+            if (!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
                 response.sendError(403);
             }
 
             Problem problem = new Problem();
             problem.setName(requestBody.get("problem_name").toString());
-            problem.setTag((int)requestBody.get("tags"));
-            problem.setBranch((int)requestBody.get("branch"));
+            problem.setTag((int) requestBody.get("tags"));
+            problem.setBranch((int) requestBody.get("branch"));
 
-            problem.setDifficulty((int)requestBody.get("difficulty"));
+            problem.setDifficulty((int) requestBody.get("difficulty"));
             problem.setContent(requestBody.get("content").toString());
             problem.setSolution(requestBody.get("solution").toString());
-            problem.setStatus((int)requestBody.get("state"));
+            problem.setStatus((int) requestBody.get("state"));
             problem.setAnswer(requestBody.get("answer").toString());
 
 
             // Verify parameters
-            if(!Verifiers.inRange(problem.getName().length(), 50, 1)) {
-                log.warn("failed to update problem code "+problem_code+": problem name length out of bound");
+            if (!Verifiers.inRange(problem.getName().length(), 50, 1)) {
+                log.warn("failed to update problem code " + problem_code + ": problem name length out of bound");
                 response.setStatus(400);
                 return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Problem name has illegal length");
             }
@@ -212,7 +214,7 @@ public class ProblemController {
             return RestfulResponse.responseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
         } catch (LiLACParsingException e) {
             response.setStatus(400);
-            return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "LiLAC cannot be compiled: "+e.getMessage());
+            return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "LiLAC cannot be compiled: " + e.getMessage());
         } catch (Exception e) {
             log.error("failed to update problem", e);
             response.setStatus(500);
@@ -227,7 +229,7 @@ public class ProblemController {
                                @PathVariable("problem_code") int problem_code) throws Exception {
         sessionService.loadIdentity(model, session);
         Problem problem = problemService.getProblem(problem_code);
-        if(problem == null) {
+        if (problem == null) {
             response.sendError(404);
             return null;
         }
@@ -273,8 +275,8 @@ public class ProblemController {
                              @RequestParam("problem-code") int problem_code) {
         try {
             Problem problem = problemService.getProblem(problem_code);
-            if(problem == null) {
-                return RestfulResponse.responseResult(HttpStatus.NOT_FOUND, "no problem with code "+problem_code+" was found");
+            if (problem == null) {
+                return RestfulResponse.responseResult(HttpStatus.NOT_FOUND, "no problem with code " + problem_code + " was found");
             }
             JSONObject resp = new JSONObject();
             resp.put("code", problem.getCode());
@@ -300,7 +302,7 @@ public class ProblemController {
     )
     @ResponseBody
     public String judgeSubmit(HttpSession session, HttpServletResponse response,
-                            @RequestBody Map<String, String> requestBody) {
+                              @RequestBody Map<String, String> requestBody) {
         int problemCode = Integer.parseInt(requestBody.get("problem-code"));
         String answerJson = requestBody.get("answer");
         JSONArray ans = new JSONArray(answerJson);
@@ -327,11 +329,11 @@ public class ProblemController {
                                @RequestBody Map<String, String> requestBody) {
 
         try {
-            if(!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
+            if (!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {
                 response.sendError(403);
             }
 
-            if(requestBody.get("lilac") == null) {
+            if (requestBody.get("lilac") == null) {
                 response.setStatus(400);
                 return RestfulResponse.responseMessage(HttpStatus.BAD_REQUEST, "Given LiLAC code is null");
             }

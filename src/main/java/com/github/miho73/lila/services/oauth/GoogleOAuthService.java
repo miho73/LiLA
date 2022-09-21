@@ -46,7 +46,7 @@ public class GoogleOAuthService extends OAuthService {
                     "redirect_uri", redirectUri
             ));
             JSONObject responseJson = new JSONObject(response);
-            return new String[] {
+            return new String[]{
                     responseJson.getString("access_token"),
                     responseJson.getString("refresh_token")
             };
@@ -60,7 +60,7 @@ public class GoogleOAuthService extends OAuthService {
         try {
             Map<String, List<String>> requestParams = Map.of();
             Map<String, List<String>> header = Map.of(
-                    "Authorization", List.of("Bearer "+accessToken)
+                    "Authorization", List.of("Bearer " + accessToken)
             );
             String response = httpConnection.httpGetRequest(userDataUri, new LinkedMultiValueMap<>(requestParams), new LinkedMultiValueMap<>(header));
             return new JSONObject(response);

@@ -51,7 +51,7 @@ public class KakaoOAuthService extends OAuthService {
                     new LinkedMultiValueMap<>()
             );
             JSONObject responseJson = new JSONObject(response);
-            return new String[] {
+            return new String[]{
                     responseJson.getString("access_token"),
                     responseJson.getString("refresh_token")
             };
@@ -67,7 +67,7 @@ public class KakaoOAuthService extends OAuthService {
                     "secure_resource", List.of("true")
             );
             Map<String, List<String>> header = Map.of(
-                    "Authorization", List.of("Bearer "+accessToken)
+                    "Authorization", List.of("Bearer " + accessToken)
             );
             String response = httpConnection.httpPostRequest(userDataUri, new LinkedMultiValueMap<>(requestParams), new LinkedMultiValueMap<>(header));
             return new JSONObject(response);

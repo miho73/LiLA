@@ -1,5 +1,10 @@
 package com.github.miho73.lila.objects;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Problem {
     int code, tag;
     String name;
@@ -7,98 +12,27 @@ public class Problem {
     String solution;
     String answer;
     String htmlContent;
-
-    public String getHtmlContent() {
-        return htmlContent;
-    }
-
-    public void setHtmlContent(String htmlContent) {
-        this.htmlContent = htmlContent;
-    }
-
-    public String getHtmlSolution() {
-        return htmlSolution;
-    }
-
-    public void setHtmlSolution(String htmlSolution) {
-        this.htmlSolution = htmlSolution;
-    }
-
     String htmlSolution;
     DIFFICULTY difficulty;
     BRANCH branch;
     PROBLEM_STATUS status;
 
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public int getTag() {
-        return tag;
-    }
-
-    public void setTag(int tag) {
-        this.tag = tag;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getSolution() {
-        return solution;
-    }
-
-    public void setSolution(String solution) {
-        this.solution = solution;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public DIFFICULTY getDifficulty() {
-        return difficulty;
-    }
     public int getDifficultyCode() {
         return switch (difficulty) {
-            case NOT_SET    -> 0;
-            case UNRATED    -> 1;
-            case BRONZE     -> 2;
-            case SILVER     -> 3;
-            case GOLD       -> 4;
-            case AMBER      -> 5;
-            case CRYSTAL    -> 6;
-            case EMERALD    -> 7;
-            case SAPPHIRE   -> 8;
-            case RUBY       -> 9;
-            case DIAMOND    -> 10;
+            case NOT_SET -> 0;
+            case UNRATED -> 1;
+            case BRONZE -> 2;
+            case SILVER -> 3;
+            case GOLD -> 4;
+            case AMBER -> 5;
+            case CRYSTAL -> 6;
+            case EMERALD -> 7;
+            case SAPPHIRE -> 8;
+            case RUBY -> 9;
+            case DIAMOND -> 10;
         };
     }
 
-    public void setDifficulty(DIFFICULTY difficulty) {
-        this.difficulty = difficulty;
-    }
     public void setDifficulty(int difficulty) {
         this.difficulty = switch (difficulty) {
             case 0 -> DIFFICULTY.NOT_SET;
@@ -116,25 +50,19 @@ public class Problem {
         };
     }
 
-    public BRANCH getBranch() {
-        return branch;
-    }
     public int getBranchCode() {
         return switch (branch) {
-            case GENERAL        -> 0;
-            case ALGEBRA        -> 1;
-            case COMBINATORICS  -> 2;
-            case GEOMETRY       -> 3;
-            case NUMBER_THEORY  -> 4;
-            case PHYSICS        -> 5;
-            case CHEMISTRY      -> 6;
-            case BIOLOGY        -> 7;
+            case GENERAL -> 0;
+            case ALGEBRA -> 1;
+            case COMBINATORICS -> 2;
+            case GEOMETRY -> 3;
+            case NUMBER_THEORY -> 4;
+            case PHYSICS -> 5;
+            case CHEMISTRY -> 6;
+            case BIOLOGY -> 7;
         };
     }
 
-    public void setBranch(BRANCH branch) {
-        this.branch = branch;
-    }
     public void setBranch(int branch) {
         this.branch = switch (branch) {
             case 0 -> BRANCH.GENERAL;
@@ -149,20 +77,13 @@ public class Problem {
         };
     }
 
-    public PROBLEM_STATUS getStatus() {
-        return status;
-    }
     public int getStatusCode() {
         return switch (status) {
-            case OPEN               -> 0;
-            case CORRECTING         -> 1;
-            case NOT_SUBMITTABLE    -> 2;
-            case UNPUBLISHED        -> 3;
+            case OPEN -> 0;
+            case CORRECTING -> 1;
+            case NOT_SUBMITTABLE -> 2;
+            case UNPUBLISHED -> 3;
         };
-    }
-
-    public void setStatus(PROBLEM_STATUS status) {
-        this.status = status;
     }
 
     public void setStatus(int status) {

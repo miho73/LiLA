@@ -17,6 +17,7 @@ public class Judge {
             default -> throw new IllegalStateException("Unexpected value for judge method: " + m);
         };
     }
+
     public int getMethodCode() {
         return switch (method) {
             case SELF -> 0;
