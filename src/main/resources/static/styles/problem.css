@@ -91,6 +91,12 @@ div.problem-answer {
     display: none;
     transform-origin: top left;
     transform: scaleY(0);
+}
+div.problem-answer-field {
+    transform-origin: top left;
+    transform: scaleY(1);
+}
+div.problem-answer-field,div.problem-answer {
     -webkit-transition: all .2s cubic-bezier(0, 0, 0.21, 1);
     -moz-transition: all .2s cubic-bezier(0, 0, 0.21, 1);
     -o-transition: all .2s cubic-bezier(0, 0, 0.21, 1);
@@ -100,6 +106,11 @@ div.open-answer {
     opacity: 1;
     max-height: 9999999px;
     transform: scaleY(1);
+}
+div.after-submit {
+    max-height: 0;
+    opacity: 0;
+    transform: scaleY(0);
 }
 
 div.problem-answer-field {

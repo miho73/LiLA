@@ -1,8 +1,10 @@
 package com.github.miho73.lila.Repositories;
 
+import com.github.miho73.lila.objects.Judge;
 import com.github.miho73.lila.objects.Problem;
 import lombok.extern.slf4j.Slf4j;
-import org.postgresql.util.PSQLException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -18,8 +20,6 @@ public class ProblemRepository extends Database {
             String sql = "INSERT INTO problems (problem_name, content, html_content, solution, html_solution, answer, tags, difficulty, branch, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
             PreparedStatement psmt = connection.prepareStatement(sql);
-
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
             psmt.setString(1, problem.getName());
             psmt.setString(2, problem.getContent());
@@ -56,7 +56,7 @@ public class ProblemRepository extends Database {
 
         ResultSet rs = psmt.executeQuery();
         if(!rs.next()) {
-            log.warn("problem with code "+problemCode+" was not found.");
+            log.warn("problem with code "+problemCode+" was not found. problem was not queried");
             return null;
         }
 
@@ -81,8 +81,6 @@ public class ProblemRepository extends Database {
             String sql = "UPDATE problems SET problem_name=?, content=?, html_content=?, solution=?, html_solution=?, answer=?, tags=?, difficulty=?, branch=?, status=? WHERE problem_code=?;";
 
             PreparedStatement psmt = connection.prepareStatement(sql);
-
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
             psmt.setString(1, problem.getName());
             psmt.setString(2, problem.getContent());
@@ -137,6 +135,41 @@ public class ProblemRepository extends Database {
             return searched;
         } catch (SQLException e) {
             log.error("SQLException: failed to search problem. query="+sql+". text="+query, e);
+            throw e;
+        }
+    }
+
+    public List<Judge> getAnswers(int problemCode, Connection connection) throws SQLException {
+        try {
+            String sql = "SELECT answer FROM problems WHERE problem_code=?;";
+
+            PreparedStatement psmt = connection.prepareStatement(sql);
+            psmt.setInt(1, problemCode);
+
+            ResultSet rs = psmt.executeQuery();
+            if(!rs.next()) {
+                log.warn("problem with code "+problemCode+" was not found. answer cannot be queried");
+                return null;
+            }
+
+            JSONArray answer = new JSONArray(rs.getString("answer"));
+            List<Judge> ret = new Vector<>();
+
+            answer.forEach(judge -> {
+                Judge single = new Judge();
+                JSONObject dbA = (JSONObject) judge;
+
+                single.setQuota(dbA.getInt("q"));
+                single.setMethod(dbA.getInt("m"));
+                single.setAnswer(dbA.getString("a"));
+                single.setName(dbA.getString("n"));
+
+                ret.add(single);
+            });
+
+            return ret;
+        } catch (SQLException e) {
+            log.error("SQLException: failed to query problem answer of "+problemCode);
             throw e;
         }
     }

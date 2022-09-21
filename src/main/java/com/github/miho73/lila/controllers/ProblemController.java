@@ -1,14 +1,15 @@
 package com.github.miho73.lila.controllers;
 
+import com.github.miho73.lila.objects.Exception.JudgeException;
 import com.github.miho73.lila.objects.Exception.LiLACParsingException;
 import com.github.miho73.lila.objects.Judge;
 import com.github.miho73.lila.objects.Problem;
+import com.github.miho73.lila.services.JudgeService;
 import com.github.miho73.lila.services.ProblemService;
 import com.github.miho73.lila.services.SessionService;
 import com.github.miho73.lila.utils.LiLACRenderer;
 import com.github.miho73.lila.utils.RestfulResponse;
 import com.github.miho73.lila.utils.Verifiers;
-import io.lettuce.core.dynamic.annotation.Param;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,6 +39,9 @@ public class ProblemController {
 
     @Autowired
     ProblemService problemService;
+
+    @Autowired
+    JudgeService judgeService;
 
     @GetMapping("")
     public String problem(Model model, HttpSession session) {
@@ -285,16 +289,42 @@ public class ProblemController {
             return RestfulResponse.responseResult(HttpStatus.OK, resp);
         } catch (Exception e) {
             response.setStatus(500);
-            return RestfulResponse.responseResult(HttpStatus.INTERNAL_SERVER_ERROR, "Database error.");
+            return RestfulResponse.responseResult(HttpStatus.INTERNAL_SERVER_ERROR, "database error");
         }
     }
+
+    @PostMapping(
+            value = "/judge/submit",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseBody
+    public String judgeSubmit(HttpSession session, HttpServletResponse response,
+                            @RequestBody Map<String, String> requestBody) {
+        int problemCode = Integer.parseInt(requestBody.get("problem-code"));
+        String answerJson = requestBody.get("answer");
+        JSONArray ans = new JSONArray(answerJson);
+
+        try {
+            JSONObject judgeResult = judgeService.judgeSubmit(problemCode, ans);
+            return RestfulResponse.responseResult(HttpStatus.OK, judgeResult);
+        } catch (SQLException e) {
+            response.setStatus(500);
+            return RestfulResponse.responseResult(HttpStatus.INTERNAL_SERVER_ERROR, "database error");
+        } catch (JudgeException e) {
+            response.setStatus(400);
+            return RestfulResponse.responseResult(HttpStatus.BAD_REQUEST, "");
+        }
+    }
+
     @PostMapping(
             value = "/lilac/compile",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
     @ResponseBody
     public String compileLilac(HttpSession session, HttpServletResponse response,
-                               @RequestBody Map<String,String> requestBody) {
+                               @RequestBody Map<String, String> requestBody) {
 
         try {
             if(!sessionService.checkPrivilege(session, SessionService.PRIVILEGE.PROBLEM_EDITOR)) {

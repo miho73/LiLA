@@ -9,11 +9,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.concurrent.ConcurrentNavigableMap;
 
 @Slf4j
 @Service("AuthService")

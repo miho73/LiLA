@@ -32,7 +32,7 @@
                 </div>
                 <div class="problem-content" th:utext="${content}"></div>
                 <div class="problem-answer" id="answer-area" th:utext="${solution}"></div>
-                <div class="problem-answer-field vertical-align">
+                <div class="problem-answer-field vertical-align" id="answer-input">
                     <div class="glow judge-element" th:each="judge: ${answer}">
                         <p class="judge-name" th:text="${judge.getName()}"></p>
                         <div class="answer-area">
@@ -64,5 +64,8 @@
             <th:block th:replace="fragments/base.html :: footer"/>
         </div>
     </body>
+    <script>
+        const PROBLEM_CODE = [[${code}]]
+    </script>
     <th:block th:replace="fragments/modules.html :: math"/>
 </html>

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -25,7 +24,7 @@ public class ProblemService {
 
     @PostConstruct
     public void initProblemSystem() {
-        Connection connection = null;
+        Connection connection;
         try {
             connection = problemRepository.openConnection();
             PROBLEM_COUNT = problemRepository.getProblemCount(connection);
@@ -101,7 +100,6 @@ public class ProblemService {
         for (int i = 0; i < statusFlag.length; i++)
             statusFlag[i] = (status & 1 << i) != 0;
 
-        String querySql;
         StringBuilder flagSql = new StringBuilder(),
                 branchFilter = new StringBuilder("("),
                 difficultyFilter = new StringBuilder("("),
@@ -109,35 +107,35 @@ public class ProblemService {
 
         // flag sql
         int idx = 0;
-        for(boolean includeBranch : branchFlag) {
-            if(includeBranch) branchFilter.append("branch=").append(idx).append(" OR ");
+        for (boolean includeBranch : branchFlag) {
+            if (includeBranch) branchFilter.append("branch=").append(idx).append(" OR ");
             idx++;
         }
         branchFilter.append("false)");
 
         idx = 0;
-        for(boolean includeDifficulty : difficultyFlag) {
-            if(includeDifficulty) difficultyFilter.append("difficulty=").append(idx).append(" OR ");
+        for (boolean includeDifficulty : difficultyFlag) {
+            if (includeDifficulty) difficultyFilter.append("difficulty=").append(idx).append(" OR ");
             idx++;
         }
         difficultyFilter.append("false)");
 
         idx = 0;
-        for(boolean includeStatus : statusFlag) {
-            if(includeStatus) statusFilter.append("status=").append(idx).append(" OR ");
+        for (boolean includeStatus : statusFlag) {
+            if (includeStatus) statusFilter.append("status=").append(idx).append(" OR ");
             idx++;
         }
         statusFilter.append("false)");
 
-        if(branch != 0) {
+        if (branch != 0) {
             flagSql.append(branchFilter)
-                   .append(" AND ");
+                    .append(" AND ");
         }
-        if(difficulty != 0) {
+        if (difficulty != 0) {
             flagSql.append(difficultyFilter)
-                   .append(" AND ");
+                    .append(" AND ");
         }
-        if(status != 0) {
+        if (status != 0) {
             flagSql.append(statusFilter)
                     .append(" AND ");
         }

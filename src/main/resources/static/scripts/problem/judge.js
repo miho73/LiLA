@@ -50,17 +50,18 @@ function preSubmit() {
                 gei(`js-${idx}-ac`).disabled = false;
                 gei(`js-${idx}-wa`).disabled = false;
                 answers.push({
-                    t: 0,
+                    m: 0,
                     a: undefined
                 });
             }
+            else if(answers[idx].a == undefined) pass = false;
         }
         // MathQuill input
         else {
             if(answers[idx] == undefined) {
                 const latex = answerElement.latex();
                 answers.push({
-                    t: 1,       //type
+                    m: 1,       //type
                     a: latex    //answer
                 });
                 gei(`je-${idx}`).innerText = `$${latex}$`;
@@ -80,9 +81,12 @@ function preSubmit() {
 
 function submit() {
     axios.post('/problems/judge/submit', {
-        a: JSON.stringify(answers)
+        'problem-code': PROBLEM_CODE,
+        'answer': JSON.stringify(answers)
     }).then(response => {
+        gei('answer-input').classList.add('after-submit');
 
+        afterSubmit(response);
     }).catch(error => {
         console.error(error);
     });
@@ -99,4 +103,8 @@ function wa(e) {
     gei(`js-${e}-ac`).disabled = true;
     gei(`js-${e}-wa`).disabled = true;
     answers[e].a = false;
+}
+
+function afterSubmit(res) {
+
 }

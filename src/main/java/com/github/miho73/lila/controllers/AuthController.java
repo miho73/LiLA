@@ -1,24 +1,20 @@
 package com.github.miho73.lila.controllers;
 
-import com.github.miho73.lila.objects.User;
 import com.github.miho73.lila.services.AuthService;
 import com.github.miho73.lila.services.SessionService;
 import com.github.miho73.lila.services.oauth.GoogleOAuthService;
 import com.github.miho73.lila.services.oauth.KakaoOAuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.net.http.HttpResponse;
 
 @Slf4j
 @Controller("AuthController")
@@ -74,15 +70,9 @@ public class AuthController {
 
         int result = authService.proceedKakaoAuth(code, state, session);
         switch (result) {
-            case 0 -> {
-                response.sendRedirect("/");
-            }
-            case 1 -> {
-                response.sendError(401);
-            }
-            case 2, 3, 4, 5 -> {
-                response.sendError(500);
-            }
+            case 0 -> response.sendRedirect("/");
+            case 1 -> response.sendError(401);
+            case 2, 3, 4, 5 -> response.sendError(500);
         }
     }
     @GetMapping("oauth/callback/google")
@@ -97,15 +87,9 @@ public class AuthController {
 
         int result = authService.proceedGoogleAuth(code, state, session);
         switch (result) {
-            case 0 -> {
-                response.sendRedirect("/");
-            }
-            case 1 -> {
-                response.sendError(401);
-            }
-            case 2, 3, 4, 5 -> {
-                response.sendError(500);
-            }
+            case 0 -> response.sendRedirect("/");
+            case 1 -> response.sendError(401);
+            case 2, 3, 4, 5 -> response.sendError(500);
         }
     }
 }
