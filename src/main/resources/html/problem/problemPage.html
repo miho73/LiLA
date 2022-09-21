@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="/static/styles/problem.css">
         <link rel="stylesheet" href="/static/styles/lilac.css">
         <script src="/static/scripts/problem/judge.js"></script>
+        <th:block th:replace="fragments/header.html :: mathjax"/>
         <th:block th:replace="fragments/header.html :: mathquill"/>
     </head>
     <body>
@@ -30,21 +31,28 @@
                     <p th:unless="${active==0}" class="problem-notice-error">이 문제는 제출할 수 없습니다.</p>
                 </div>
                 <div class="problem-content" th:utext="${content}"></div>
-                <div class="problem-answer" th:utext="${solution}"></div>
+                <div class="problem-answer" id="answer-area" th:utext="${solution}"></div>
                 <div class="problem-answer-field vertical-align">
                     <div class="glow judge-element" th:each="judge: ${answer}">
                         <p class="judge-name" th:text="${judge.getName()}"></p>
                         <div class="answer-area">
                             <th:block th:if="${judge.getMethodCode() == 0}">
                                 <div class="answer-field" jtype="0">
-                                    <button class="button" th:id="${'js-'+judgeStat.index+'-ac'}" disabled>정답</button>
-                                    <button class="button" th:id="${'js-'+judgeStat.index+'-wa'}" disabled>오답</button>
+                                    <button class="button transition" th:id="${'js-'+judgeStat.index+'-ac'}" th:onclick="ac([[${judgeStat.index}]])" disabled>정답</button>
+                                    <button class="button transition" th:id="${'js-'+judgeStat.index+'-wa'}" th:onclick="wa([[${judgeStat.index}]])" disabled>오답</button>
                                 </div>
                             </th:block>
                             <th:block th:if="${judge.getMethodCode() == 1}">
                                 <span jtype="1" class="math-edit answer-field" th:id="${'je-'+judgeStat.index}"></span>
                             </th:block>
                         </div>
+                    </div>
+                    <div class="submit-notice">
+                        <p>정답 및 채점 규칙에 맞게 입력해야 정답처리됩니다.</p>
+                    </div>
+                    <div class="judge-control horizontal-align">
+                        <button class="button" onclick="preSubmit()" id="submit">제출</button>
+                        <button class="button" id="answer">정답만</button>
                     </div>
                 </div>
             </section>
@@ -56,4 +64,5 @@
             <th:block th:replace="fragments/base.html :: footer"/>
         </div>
     </body>
+    <th:block th:replace="fragments/modules.html :: math"/>
 </html>

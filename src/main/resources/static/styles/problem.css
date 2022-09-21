@@ -85,6 +85,23 @@ p.problem-notice-error {
     color: var(--error);
 }
 
+div.problem-answer {
+    opacity: 0;
+    max-height: 0;
+    display: none;
+    transform-origin: top left;
+    transform: scaleY(0);
+    -webkit-transition: all .2s cubic-bezier(0, 0, 0.21, 1);
+    -moz-transition: all .2s cubic-bezier(0, 0, 0.21, 1);
+    -o-transition: all .2s cubic-bezier(0, 0, 0.21, 1);
+    transition: all .2s cubic-bezier(0, 0, 0.21, 1);
+}
+div.open-answer {
+    opacity: 1;
+    max-height: 9999999px;
+    transform: scaleY(1);
+}
+
 div.problem-answer-field {
     margin-top: 50px;
 }
