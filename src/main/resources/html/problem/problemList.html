@@ -12,16 +12,16 @@
     <th:block th:replace="fragments/base.html :: header-nav"/>
     <section class="container">
         <div class="prob-nav">
-            <div class="prob-links">
+            <div class="prob-nav-links">
                 <a class="prob-nav-ele transition" href="/problems"
-                   th:classappend="${page} == '0' ? 'prob-ele-selected'">전체</a>
+                   th:classappend="${page} == '0' ? 'prob-nav-ele-selected'">전체</a>
                 <a class="prob-nav-ele transition" href="/problems/branch"
-                   th:classappend="${page} == '1' ? 'prob-ele-selected'">분류</a>
+                   th:classappend="${page} == '1' ? 'prob-nav-ele-selected'">분류</a>
                 <a class="prob-nav-ele transition" href="/problems/difficulty"
-                   th:classappend="${page} == '2' ? 'prob-ele-selected'">난이도</a>
+                   th:classappend="${page} == '2' ? 'prob-nav-ele-selected'">난이도</a>
                 <a class="prob-nav-ele transition">기타</a>
             </div>
-            <div class="prob-search">
+            <div class="prob-nav-search">
                 <input type="text" spellcheck="false" placeholder="검색">
                 <button type="submit" class="button">검색</button>
             </div>

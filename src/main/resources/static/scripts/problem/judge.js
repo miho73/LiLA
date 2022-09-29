@@ -34,6 +34,27 @@ function openAnswer() {
 
 var isFirst = true;
 function preSubmit() {
+    // pre - validate text input
+    var validation = false, idx = 0;
+    for(const answerElement of answerElements) {
+        if(answerElement != 0) {
+            const len = answerElement.latex().length;
+            if(len > 100) {
+                validation = true;
+                gei(`je-${idx}`).classList.add('form-error');
+            }
+            else {
+                gei(`je-${idx}`).classList.remove('form-error');
+            }
+        }
+        idx++;
+    }
+    if(validation) {
+        notification('정답을 확인해주세요', '정답이 너무 깁니다.', 1);
+        return;
+    }
+
+    // all valid. proceed answer collection
     if(isFirst) {
         gei('answer').remove();
         openAnswer();
@@ -43,6 +64,7 @@ function preSubmit() {
     // check all answers;
     var idx = 0, pass = true;
     for(const answerElement of answerElements) {
+        // user judge select
         if(answerElement == 0) {
             if(answers[idx] == undefined) {
                 pass = false;
@@ -80,14 +102,25 @@ function preSubmit() {
 }
 
 function submit() {
+    // validate
+    for(const answer of answers) {
+        if(answer.m != 0 && answer.a.length > 100) {
+            notification('제출하지 못했습니다', '정답을 검증하지 못했습니다.', 2);
+            return;
+        } 
+    }
+
+    gei('judge-result').style.display = 'block';
     axios.post('/problems/judge/submit', {
         'problem-code': PROBLEM_CODE,
         'answer': JSON.stringify(answers)
     }).then(response => {
         gei('answer-input').classList.add('after-submit');
 
-        afterSubmit(response);
+        if(response.status != 200) throw new Error();
+        afterSubmit(response.data.result);
     }).catch(error => {
+        notification('제출하지 못했습니다.', '제출 중 문제가 발생했습니다.', 2);
         console.error(error);
     });
 }
@@ -106,5 +139,22 @@ function wa(e) {
 }
 
 function afterSubmit(res) {
+    console.log(res);
 
+    var html = '<table class="report-table"><thead><tr><td>채점</td><td>정답</td><td>내 정답</td><td>점수</td></tr></thead><tbody>';
+    var idx = 0;
+    for(var jud of res.judge) {
+        if(jud.method == 0) {
+            const ac = jud.correct;
+            html += `<tr><td>${gei(`jl-`+idx).innerText}</td><td></td><td>${ac ? '정답' : '오답'}</td><td class="${ac ? 'ac' : 'wa'}">${jud['your-score']} / ${jud['quota'] * res['full-score'] / 100}</td></tr>`;
+        }
+        else if(jud.method == 1) {
+            const ac = jud.correct;
+            html += `<tr><td>${gei(`jl-`+idx).innerText}</td><td>$${jud.answer}$</td><td>$${jud.yours}$</td><td class="${ac ? 'ac' : 'wa'}">${jud['your-score']} / ${jud['quota'] * res['full-score'] / 100}</td></tr>`;
+        }
+    }
+    html += `</tbody></table><p class="judge-summary">${res['your-score']} / ${res['full-score']}</p>`;
+    gei('judge-result').innerHTML = html;
+
+    MathJax.Hub.Typeset();
 }

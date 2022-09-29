@@ -32,9 +32,9 @@
         </div>
         <div class="problem-content" th:utext="${content}"></div>
         <div class="problem-answer" id="answer-area" th:utext="${solution}"></div>
-        <div class="problem-answer-field vertical-align" id="answer-input">
+        <div class="answer-input-area vertical-align" id="answer-input">
             <div class="glow judge-element" th:each="judge: ${answer}">
-                <p class="judge-name" th:text="${judge.getName()}"></p>
+                <p class="judge-name" th:id="${'jl-'+judgeStat.index}" th:text="${judge.getName()}"></p>
                 <div class="answer-area">
                     <th:block th:if="${judge.getMethodCode() == 0}">
                         <div class="answer-field" jtype="0">
@@ -59,6 +59,9 @@
                 <button class="button" id="answer">정답만</button>
             </div>
         </div>
+        <div id="judge-result">
+            <p>채점중</p>
+        </div>
     </section>
     <section class="container" th:if="${active==3}">
         <p class="problem-notice-error">비공개된 문제입니다.</p>
@@ -67,6 +70,7 @@
     </section>
     <th:block th:replace="fragments/base.html :: footer"/>
 </div>
+<th:block th:replace="fragments/modules.html :: notification"/>
 </body>
 <script>
         const PROBLEM_CODE = [[${code}]]

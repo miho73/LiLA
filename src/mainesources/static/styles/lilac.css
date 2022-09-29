@@ -1,0 +1,123 @@
+/** LiLAC CSS **/
+:is(h1, h2, h3, h4, h5, h6, span, p, td).lilac {
+  line-break: anywhere;
+  font-weight: 400;
+  font-size: 1em;
+  color: var(--text-gray);
+  margin: 0 0 7px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+li.lilac {
+  line-break: anywhere;
+  font-weight: 400;
+  font-size: 1em;
+  color: var(--text-gray);
+  margin: 0 0 4px;
+}
+
+span.lilac {
+  color: inherit;
+  font-style: inherit;
+}
+
+p.lilac {
+  font-size: 1.1em;
+}
+
+h1.lilac-section {
+  font-size: 1.65em;
+  font-weight: 600;
+  border-bottom: 3px var(--lilac) solid;
+  color: #333;
+  margin: 10px 0 0 0;
+  z-index: 1;
+  position: relative;
+  width: fit-content;
+  padding-bottom: 2px;
+}
+
+hr.lilac-section-hr {
+  margin: -3px 0 7px 0;
+  border: none;
+  z-index: 0;
+  background: #ddd;
+  height: 3px;
+}
+
+span.lilac-bold {
+  font-weight: 900;
+}
+
+span.lilac-italic {
+  font-style: italic;
+}
+
+span.lilac-strike {
+  text-decoration: line-through;
+}
+
+span.lilac-underline {
+  text-decoration: underline;
+}
+
+blockquote {
+  margin: 20px 30px;
+  border-left: 4px #cdcdcd solid;
+  padding-left: 15px;
+}
+
+blockquote > p {
+  color: var(--caption-gray);
+}
+
+img.lilac-img {
+  max-width: 100%;
+}
+
+table.lilac-table {
+  border: 1px var(--border-gray) solid;
+  padding: 5px;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+td.lilac-td {
+  border: 1px var(--border-gray) solid;
+  padding: 5px;
+}
+
+div.lilac-box {
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 4px 2px var(--box-shadow);
+  margin: 10px 0;
+}
+
+details {
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 4px 2px var(--box-shadow);
+  margin: 10px 0;
+}
+
+summary.lilac-fold-txt {
+  cursor: pointer;
+}
+
+summary.lilac-fold-txt::after {
+  content: attr(open);
+  line-break: anywhere;
+  font-weight: 400;
+  font-size: 1em;
+  color: var(--text-gray);
+}
+
+details.lilac-fold[open] > summary.lilac-fold-txt {
+  margin-bottom: 6px;
+}
+
+details.lilac-fold[open] > summary.lilac-fold-txt::after {
+  content: attr(close);
+}
