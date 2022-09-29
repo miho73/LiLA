@@ -52,6 +52,6 @@ lila:
       user-data-uri: https://kapi.kakao.com/v2/user/me
   database:
     connection:
-      url: jdbc:postgresql://localhost:5432/lila
+      url: ENC(NvWyumLRl0IdPjbAjzu33DdfXuZuytBR84bFFDrMcERXg+sDSVjGrPgdIxo+7lTMOFtHYTw1tv9P7AuKhGOFx729Cz9SpmZyW/n01hYKp4A=)
       name: ENC(iDX5DTpkR+cA2HmnesAoZshvY1TRUCv3vb6k2ckcXOvwvx8Oyc1/FsRK58X6VAlH)
       password: ENC(qTed/xUH+bQq8sEAQLDIRw+QfLWSsm/mW7Gd0vqLLULPnax+2IEg47VGZT6wWXj7)
